@@ -10,7 +10,8 @@ import {
   INTERNET_CONNECTION_STATUS,
   SUGGESTION_STORE,
   NOTIFIED_NAV,
-  NOTIFIED_SUB_NAV
+  NOTIFIED_SUB_NAV,
+  TEST_DATA_UPDATE
 } from 'src/stateManagement/global/GlobalActionTypes';
 
 const initialState = {
@@ -30,12 +31,19 @@ const initialState = {
   suggestionCount: 0,
   notifiedNav: '',
   notifiedSubNav: '',
-  testData:'test state'
+  testData:'welcome to saas project'
 };
 
 export default function (state = initialState, action) {
   const {type, payload} = action;
   switch (type) {
+    case TEST_DATA_UPDATE:
+      return {
+        ...state,
+        testData: payload.message
+      }
+
+
     case APP_INITIALIZATION:
       return {
         ...state,

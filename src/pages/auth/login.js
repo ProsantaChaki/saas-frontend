@@ -1,226 +1,248 @@
-import { useCallback, useState } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import { useRouter } from "next/navigation";
-import Divider from "@mui/material/Divider";
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
-import Image from "next/image";
-import GoogleIcon from "@mui/icons-material/Google";
-import Stack from "@mui/material/Stack";
+import { useCallback, useState } from 'react';
+import Head from 'next/head';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import {
-  Grid,
-  Card,
+  Alert,
   Box,
   Button,
+  FormHelperText,
   Link,
+  Stack,
+  Tab,
+  Tabs,
   TextField,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
-import { useAuth } from "src/hooks/use-auth";
-import getAuthState from "../../stateManagement/auth/AuthSelector";
-import { connect } from "react-redux";
-import getGlobalState from "../../stateManagement/global/globalSelector";
+  Typography
+} from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
+import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import getGlobalState from '../../stateManagement/global/globalSelector';
+import getAuthState from '../../stateManagement/auth/AuthSelector';
+import { authLoginApiCall } from '../../stateManagement/auth/AuthActionCreators';
+import { connect } from 'react-redux';
+import { testDataUpdate } from '../../stateManagement/global/GlobalActionCreators';
+
 
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
-  test: getGlobalState(state)?.test,
-  isOtpRequired: getAuthState(state)?.isOtpRequired,
+  testData: getGlobalState(state)?.testData,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  /* authLoginApiCallProp: (data) => dispatch(authLoginApiCall(data)),
-  authOtpRequireToggleProp: (data) => dispatch(authOtpRequireToggle(data)),*/
+  testDataUpdateProp: (data) => dispatch(testDataUpdate(data)),
 });
 
-const Page = ({ isAuthenticated, test }) => {
-  console.log(".........................", isAuthenticated, test);
+
+const Page = (props) => {
+
+  console.log('................', props.testData, props.isAuthenticated)
+
+
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState("email");
-
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required"),
+  const [method, setMethod] = useState('email');
+  const formik = useFormik({
+    initialValues: {
+      email: 'demo@devias.io',
+      password: 'Password123!',
+      submit: null
+    },
+    validationSchema: Yup.object({
+      email: Yup
+        .string()
+        .email('Must be a valid email')
+        .max(255)
+        .required('Email is required'),
+      password: Yup
+        .string()
+        .max(255)
+        .required('Password is required')
+    }),
+    onSubmit: async (values, helpers) => {
+      props.testDataUpdateProp('Global data update')
+     /* try {
+        await auth.signIn(values.email, values.password);
+        router.push('/');
+      } catch (err) {
+        helpers.setStatus({ success: false });
+        helpers.setErrors({ submit: err.message });
+        helpers.setSubmitting(false);
+      }*/
+    }
   });
 
-  const handleMethodChange = useCallback((event, value) => {
-    setMethod(value);
-  }, []);
+  const handleMethodChange = useCallback(
+    (event, value) => {
+      setMethod(value);
+    },
+    []
+  );
 
-  const handleSkip = useCallback(() => {
-    auth.skip();
-    router.push("/");
-  }, [auth, router]);
+  const handleSkip = useCallback(
+    () => {
+      auth.skip();
+      router.push('/');
+    },
+    [auth, router]
+  );
 
   return (
     <>
-      <div
-        className="loginPaseLogo"
-        style={{ textAlign: "center", marginTop: "4rem", marginBottom: "3rem" }}
+      <Head>
+        <title>
+          Login | Devias Kit
+        </title>
+      </Head>
+      <Box
+        sx={{
+          backgroundColor: 'background.paper',
+          flex: '1 1 auto',
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'center'
+        }}
       >
-        <div>
-          <Image src="/assets/logos/logo.svg" alt="logo" width={250} height={60} />
-        </div>
-      </div>
-
-      <div className="loginPageCardSection">
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            "& > *": {
-              m: 1,
-            },
+            maxWidth: 550,
+            px: 3,
+            py: '100px',
+            width: '100%'
           }}
         >
-          <Grid container columns={12} spacing={1} sx={{ width: "75%" }} className="temImage">
-            <Grid item xs={12} md={6} sm={12} sx={{ marginRight: "15px" }}>
-              <Card sx={{ minWidth: 275 }}>
-                <CardContent>
+          <div>
+            <Stack
+              spacing={1}
+              sx={{ mb: 3 }}
+            >
+              <Typography variant="h4">
+                Login
+              </Typography>
+              <Typography
+                color="text.secondary"
+                variant="body2"
+              >
+                Don&apos;t have an account?
+                &nbsp;
+                <Link
+                  component={NextLink}
+                  href="/auth/register"
+                  underline="hover"
+                  variant="subtitle2"
+                >
+                  Register
+                </Link>
+              </Typography>
+            </Stack>
+            <Tabs
+              onChange={handleMethodChange}
+              sx={{ mb: 3 }}
+              value={method}
+            >
+              <Tab
+                label="Email"
+                value="email"
+              />
+              <Tab
+                label="Phone Number"
+                value="phoneNumber"
+              />
+            </Tabs>
+            {method === 'email' && (
+              <form
+                noValidate
+                onSubmit={formik.handleSubmit}
+              >
+                <Stack spacing={3}>
+                  <TextField
+                    error={!!(formik.touched.email && formik.errors.email)}
+                    fullWidth
+                    helperText={formik.touched.email && formik.errors.email}
+                    label="Email Address"
+                    name="email"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    type="email"
+                    value={formik.values.email}
+                  />
+                  <TextField
+                    error={!!(formik.touched.password && formik.errors.password)}
+                    fullWidth
+                    helperText={formik.touched.password && formik.errors.password}
+                    label="Password"
+                    name="password"
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    type="password"
+                    value={formik.values.password}
+                  />
+                </Stack>
+                <FormHelperText sx={{ mt: 1 }}>
+                  Optionally you can skip.
+                </FormHelperText>
+                {formik.errors.submit && (
                   <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{ textAlign: "center", fontWeight: "bold", letterSpacing: ".01em" }}
+                    color="error"
+                    sx={{ mt: 3 }}
+                    variant="body2"
                   >
-                    Log in to Saas
+                    {formik.errors.submit}
                   </Typography>
-                  <Typography
-                    sx={{ fontSize: 16, textAlign: "center", padding: "5px" }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Don't have an account?
-                    <a href="#" style={{ textDecoration: "none", color: "#3498db" }}>
-                      Start a free trial
-                    </a>
-                  </Typography>
-
-                  <Formik
-                    initialValues={{
-                      email: "",
-                      password: "",
-                    }}
-                    validationSchema={validationSchema}
-                    onSubmit={(values, actions) => {
-                      console.log(values);
-                      actions.setSubmitting(false);
-                    }}
-                  >
-                    {({ errors, touched, values }) => (
-                      <Form>
-                        <div style={{ marginTop: "1rem" }}>
-                          <label>Email address or username</label>
-                          <TextField fullWidth id="fullWidth" />
-                        </div>
-                        <div style={{ marginTop: "1rem" }}>
-                          <label htmlFor="password">Password</label>
-                          <TextField fullWidth type="password" id="fullWidth" />
-                          {errors.password && touched.password && <div>{errors.password}</div>}
-                        </div>
-                        <div>
-                          <FormGroup>
-                            <FormControlLabel control={<Checkbox />} label="Keep me logged in" />
-                          </FormGroup>
-                        </div>
-                        <div style={{ textAlign: "right", marginTop: "-2rem" }}>
-                          <Link href="" sx={{ textDecoration: "none" }}>
-                            Forgot password?
-                          </Link>
-                        </div>
-
-                        <div>
-                          <Button
-                            variant="contained"
-                            fullWidth
-                            sx={{
-                              background: "#0fb860",
-                              borderRadius: "4px",
-                              marginTop: "2rem",
-                              fontWeight: "bold",
-                              fontSize: "18px",
-                            }}
-                          >
-                            Log in
-                          </Button>
-                        </div>
-                        <Divider component="li" sx={{ marginTop: "10px" }}>
-                          or
-                        </Divider>
-
-                        <Stack direction="row" spacing={2} sx={{ marginTop: "1rem" }}>
-                          <Button
-                            variant="outlined"
-                            startIcon={<GoogleIcon />}
-                            fullWidth
-                            sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
-                          >
-                            Log in with Google
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            fullWidth
-                            sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
-                          >
-                            Log in with SAML
-                          </Button>
-                        </Stack>
-                      </Form>
-                    )}
-                  </Formik>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={5} sm={12}>
-              <Card sx={{ minWidth: 275 }}>
-                <CardContent>
+                )}
+                <Button
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  type="submit"
+                  variant="contained"
+                >
+                  Continue
+                </Button>
+                <Button
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  onClick={handleSkip}
+                >
+                  Skip authentication
+                </Button>
+                <Alert
+                  color="primary"
+                  severity="info"
+                  sx={{ mt: 3 }}
+                >
                   <div>
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{ letterSpacing: ".01em", marginTop: "-1.5rem" }}
-                    >
-                      What's New
-                    </Typography>
+                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
                   </div>
-                  <div>
-                    <CardMedia
-                      sx={{ height: 240, marginTop: "10px" }}
-                      image="/assets/aaa.jpeg"
-                      title="green iguana"
-                    />
-                    <CardContent>
-                      <Typography
-                        gutterBottom
-                        variant="h6"
-                        component="div"
-                        sx={{ margin: "-13px 0 8px 0" }}
-                      >
-                        Detect and Address Maintenance Trends quickly with these Widgets
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-
-                    <Divider />
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+                </Alert>
+              </form>
+            )}
+            {method === 'phoneNumber' && (
+              <div>
+                <Typography
+                  sx={{ mb: 1 }}
+                  variant="h6"
+                >
+                  Not available in the demo
+                </Typography>
+                <Typography color="text.secondary">
+                  To prevent unnecessary costs we disabled this feature in the demo.
+                </Typography>
+              </div>
+            )}
+          </div>
         </Box>
-      </div>
+      </Box>
     </>
   );
 };
+
+Page.getLayout = (page) => (
+  <AuthLayout>
+    {page}
+  </AuthLayout>
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);

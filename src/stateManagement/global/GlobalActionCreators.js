@@ -15,7 +15,16 @@ import {
   NOTIFIED_NAV,
   NOTIFIED_SUB_NAV,
   IMAGE_UPLOAD,
+  TEST_DATA_UPDATE
 } from 'src/stateManagement/global/GlobalActionTypes';
+
+function testDataUpdate(message){
+  return{
+    type: TEST_DATA_UPDATE,
+    payload: {message:message}
+  }
+}
+
 
 function startAppInitialization(payload) {
   return {
@@ -127,4 +136,5 @@ export {
   setNotifiedNav,
   setNotifiedSubNav,
   imageUpload,
+  testDataUpdate
 };
