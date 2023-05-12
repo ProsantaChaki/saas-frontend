@@ -24,6 +24,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { Layout as DashboardLayout } from '../../layouts/dashboard/layout';
 import Head from 'next/head';
 import { Container, Stack, Typography } from '@mui/material';
+import TabList from '@mui/lab/TabList';
 
 const Tab = styled(MuiTab)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
