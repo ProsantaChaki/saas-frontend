@@ -3,9 +3,28 @@ import { Box, Container, Stack, Typography } from '@mui/material';
 import { SettingsNotifications } from 'src/sections/settings/settings-notifications';
 import { SettingsPassword } from 'src/sections/settings/settings-password';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import getAuthState from '../stateManagement/auth/AuthSelector';
+import { connect } from 'react-redux';
+import { authLoginApiCall } from '../stateManagement/auth/AuthActionCreators';
+import getGlobalState from '../stateManagement/global/globalSelector';
 
-const Page = () => (
-  <>
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: getGlobalState(state)?.isAuthenticated,
+  testData: getGlobalState(state)?.testData,
+  isOtpRequired: getAuthState(state)?.isOtpRequired,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  authLoginApiCallProp: (data) => dispatch(authLoginApiCall(data)),
+  /* authOtpRequireToggleProp: (data) => dispatch(authOtpRequireToggle(data)),*/
+});
+
+
+const Page = ({testData}) => {
+  console.log('................', testData)
+  return (
+    <>
     <Head>
       <title>
         Settings | Devias Kit
@@ -29,7 +48,8 @@ const Page = () => (
       </Container>
     </Box>
   </>
-);
+)
+};
 
 Page.getLayout = (page) => (
   <DashboardLayout>
@@ -37,4 +57,4 @@ Page.getLayout = (page) => (
   </DashboardLayout>
 );
 
-export default Page;
+export default connect(mapStateToProps, mapDispatchToProps)(Page);

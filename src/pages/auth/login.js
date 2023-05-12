@@ -18,8 +18,26 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import getAuthState from '../../stateManagement/auth/AuthSelector';
+import { connect } from 'react-redux';
+import getGlobalState from '../../stateManagement/global/globalSelector';
 
-const Page = () => {
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: getGlobalState(state)?.isAuthenticated,
+  test: getGlobalState(state)?.test,
+  isOtpRequired: getAuthState(state)?.isOtpRequired,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+ /* authLoginApiCallProp: (data) => dispatch(authLoginApiCall(data)),
+  authOtpRequireToggleProp: (data) => dispatch(authOtpRequireToggle(data)),*/
+});
+
+
+
+const Page = ({isAuthenticated, test}) => {
+  console.log('.........................',isAuthenticated, test)
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState('email');
@@ -224,4 +242,5 @@ Page.getLayout = (page) => (
   </AuthLayout>
 );
 
-export default Page;
+export default connect(mapStateToProps, mapDispatchToProps)(Page);
+

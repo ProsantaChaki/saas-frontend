@@ -10,12 +10,15 @@ import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-prog
 import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-customers';
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
+import { Provider } from 'react-redux';
+import Store from '../stateManagement/Store';
 
 const now = new Date();
 
 const Page = () => (
-  <>
-    <Head>
+  <Provider store={Store}>
+
+  <Head>
       <title>
         Overview | Devias Kit
       </title>
@@ -220,7 +223,7 @@ const Page = () => (
         </Grid>
       </Container>
     </Box>
-  </>
+  </Provider>
 );
 
 Page.getLayout = (page) => (
