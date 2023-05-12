@@ -1,6 +1,7 @@
-//export const API_BASE_URL = 'https://easy-win.softbdltd.com/api/';
-export const API_BASE_URL = 'https://easy-win.us/api/';
-export const IMAGE_BASE_URL = 'https://easy-win.us/images/users/';
+
+export const API_BASE_URL = 'https://reqres.in/api/';
+export const IMAGE_BASE_URL = 'https://reqres.in/images/users/';
+
 
 export const WEB_SOCKET_BASE_URL = '';
 

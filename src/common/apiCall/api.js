@@ -7,6 +7,21 @@ import {
 export const PAGE_SIZE = 10;
 export const GENRE_PAGE_SIZE = 9;
 
+
+export function testGetApiCall(payload) {
+  return apiGet(
+    'users?page=2',
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+    false,
+    false,
+  );
+}
+
+
 export function loginApiCall(payload) {
   return apiPost(
     LOGIN_URL,
