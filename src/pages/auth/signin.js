@@ -11,6 +11,9 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import GoogleIcon from "@mui/icons-material/Google";
 import Stack from "@mui/material/Stack";
+import getGlobalState from '../../stateManagement/global/globalSelector';
+import { testDataUpdate ,isAuthenticatedDataUpdate} from '../../stateManagement/global/GlobalActionCreators';
+import { connect } from 'react-redux';
 import {
   Grid,
   Card,
@@ -24,29 +27,27 @@ import {
 } from "@mui/material";
 import { useAuth } from "src/hooks/use-auth";
 import getAuthState from "../../stateManagement/auth/AuthSelector";
-import { connect } from "react-redux";
-import getGlobalState from "../../stateManagement/global/globalSelector";
+
 
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
-  test: getGlobalState(state)?.test,
-  isOtpRequired: getAuthState(state)?.isOtpRequired,
+  testData: getGlobalState(state)?.testData,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  /* authLoginApiCallProp: (data) => dispatch(authLoginApiCall(data)),
-  authOtpRequireToggleProp: (data) => dispatch(authOtpRequireToggle(data)),*/
+  testDataUpdateProp: (data) => dispatch(testDataUpdate(data)),
+  isAuthenticatedDataUpdateProp: (data) => dispatch(isAuthenticatedDataUpdate(data)),
 });
 
-const Page = ({ isAuthenticated, test }) => {
-  console.log(".........................", isAuthenticated, test);
+const Page = (props) => {
+  console.log('................', props.testData, props.isAuthenticated)
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState("email");
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required"),
+    // email: Yup.string().email("Invalid email address").required("Required"),
+    // password: Yup.string().required("Required"),
   });
 
   const handleMethodChange = useCallback((event, value) => {
@@ -65,7 +66,7 @@ const Page = ({ isAuthenticated, test }) => {
         style={{ textAlign: "center", marginTop: "4rem", marginBottom: "3rem" }}
       >
         <div>
-          <Image src="/assets/logos/logo.svg" alt="logo" width={250} height={60} />
+          <Image src="/assets/logos/logo.jpeg" alt="logo" width={250} height={150} />
         </div>
       </div>
 
@@ -103,26 +104,55 @@ const Page = ({ isAuthenticated, test }) => {
                   </Typography>
 
                   <Formik
-                    initialValues={{
-                      email: "",
-                      password: "",
-                    }}
-                    validationSchema={validationSchema}
-                    onSubmit={(values, actions) => {
-                      console.log(values);
-                      actions.setSubmitting(false);
-                    }}
-                  >
-                    {({ errors, touched, values }) => (
-                      <Form>
-                        <div style={{ marginTop: "1rem" }}>
+       initialValues={{ email: '', password: '' }}
+       validate={values => {
+         const errors = {};
+         if (!values.email) {
+           errors.email = 'Required';
+         } else if (
+           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+         ) {
+           errors.email = 'Invalid email address';
+         }
+         return errors;
+       }}
+       onSubmit={(values, { setSubmitting }) => {
+        props.testDataUpdateProp('Global data update');
+        props.isAuthenticatedDataUpdateProp(true)
+       }}
+     >
+       {({
+         values,
+         errors,
+         touched,
+         handleChange,
+         handleBlur,
+         handleSubmit,
+         isSubmitting,
+         /* and other goodies */
+       }) => (
+         <form onSubmit={handleSubmit}>
+           <div style={{ marginTop: "1rem" }}>
                           <label>Email address or username</label>
-                          <TextField fullWidth id="fullWidth" />
-                        </div>
-                        <div style={{ marginTop: "1rem" }}>
-                          <label htmlFor="password">Password</label>
-                          <TextField fullWidth type="password" id="fullWidth" />
-                          {errors.password && touched.password && <div>{errors.password}</div>}
+                          <input
+                              type="email"
+                              name="email"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.email}
+                              style={{width:"100%",fontSize:"18px",padding:"10px",border:".5px solid #9C9B9B",marginBottom:"1rem"}}
+                            />
+           {errors.email && touched.email && errors.email}
+           <label >Email address or password</label>
+           <input
+             type="password"
+             name="password"
+             onChange={handleChange}
+             onBlur={handleBlur}
+             value={values.password}
+             style={{width:"100%",fontSize:"18px",padding:"10px",border:".5px solid #9C9B9B"}}
+           />
+           {errors.password && touched.password && errors.password}
                         </div>
                         <div>
                           <FormGroup>
@@ -137,6 +167,7 @@ const Page = ({ isAuthenticated, test }) => {
 
                         <div>
                           <Button
+                          type="submit" disabled={isSubmitting}
                             variant="contained"
                             fullWidth
                             sx={{
@@ -153,7 +184,9 @@ const Page = ({ isAuthenticated, test }) => {
                         <Divider component="li" sx={{ marginTop: "10px" }}>
                           or
                         </Divider>
-
+         </form>
+       )}
+     </Formik>
                         <Stack direction="row" spacing={2} sx={{ marginTop: "1rem" }}>
                           <Button
                             variant="outlined"
@@ -171,9 +204,7 @@ const Page = ({ isAuthenticated, test }) => {
                             Log in with SAML
                           </Button>
                         </Stack>
-                      </Form>
-                    )}
-                  </Formik>
+                      
                 </CardContent>
               </Card>
             </Grid>

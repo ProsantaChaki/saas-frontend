@@ -24,7 +24,12 @@ function testDataUpdate(message){
     payload: {message:message}
   }
 }
-
+function isAuthenticatedDataUpdate(message){
+  return{
+    type: TEST_DATA_UPDATE,
+    payload: {message:message}
+  }
+}
 
 function startAppInitialization(payload) {
   return {
@@ -136,5 +141,6 @@ export {
   setNotifiedNav,
   setNotifiedSubNav,
   imageUpload,
-  testDataUpdate
+  testDataUpdate,
+  isAuthenticatedDataUpdate
 };
