@@ -9,6 +9,7 @@ import BellIcon from "@heroicons/react/24/solid/BellIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
+import { useCallback, useEffect, useRef, useState } from "react"; // styled components
 import {
   MenuItem,
   Card,
