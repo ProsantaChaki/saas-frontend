@@ -4,6 +4,7 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from "@mui/material/styles";
 import SearchOutlined from "@mui/icons-material/SearchOutlined";
+import { FlexBox } from "../../components/flex-box";
 import BellIcon from "@heroicons/react/24/solid/BellIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon";
@@ -48,6 +49,15 @@ export const SearchResultCard = styled(Card)(() => ({
   paddingBottom: "0.5rem",
 }));
 
+const DropDownHandler = styled(FlexBox)(({ theme }) => ({
+  whiteSpace: "pre",
+  borderRight :"1px solid #CDCCCC",
+  // borderLeft: `1px solid ${theme.palette.text.disabled}`,
+  [theme.breakpoints.down("xs")]: {
+    display: "none",
+  },
+}));
+
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
 
@@ -55,6 +65,9 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const accountPopover = usePopover();
+  const [category, setCategory] = useState("");
+  const [resultList, setResultList] = useState([]);
+  const parentRef = useRef();
 
   return (
     <>
