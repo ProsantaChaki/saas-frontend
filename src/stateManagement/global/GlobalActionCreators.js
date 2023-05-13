@@ -15,16 +15,10 @@ import {
   NOTIFIED_NAV,
   NOTIFIED_SUB_NAV,
   IMAGE_UPLOAD,
-  TEST_DATA_UPDATE
+  TEST_DATA_UPDATE,
 } from 'src/stateManagement/global/GlobalActionTypes';
 
 function testDataUpdate(message){
-  return{
-    type: TEST_DATA_UPDATE,
-    payload: {message:message}
-  }
-}
-function isAuthenticatedDataUpdate(message){
   return{
     type: TEST_DATA_UPDATE,
     payload: {message:message}
@@ -50,10 +44,10 @@ function isShowCart(payload) {
   };
 }
 
-function setIsAuthenticated(payload) {
+function setIsAuthenticated(message) {
   return {
     type: IS_AUTHENTICATED,
-    payload,
+    payload: {message:message}
   };
 }
 function commonModalDataSet(payload) {
@@ -142,5 +136,4 @@ export {
   setNotifiedSubNav,
   imageUpload,
   testDataUpdate,
-  isAuthenticatedDataUpdate
 };

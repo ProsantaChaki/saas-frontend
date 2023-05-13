@@ -12,7 +12,7 @@ import Image from "next/image";
 import GoogleIcon from "@mui/icons-material/Google";
 import Stack from "@mui/material/Stack";
 import getGlobalState from '../../stateManagement/global/globalSelector';
-import { testDataUpdate ,isAuthenticatedDataUpdate} from '../../stateManagement/global/GlobalActionCreators';
+import { testDataUpdate ,setIsAuthenticated} from '../../stateManagement/global/GlobalActionCreators';
 import { connect } from 'react-redux';
 import {
   Grid,
@@ -36,7 +36,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   testDataUpdateProp: (data) => dispatch(testDataUpdate(data)),
-  isAuthenticatedDataUpdateProp: (data) => dispatch(isAuthenticatedDataUpdate(data)),
+  setIsAuthenticatedProp: (data) => dispatch(setIsAuthenticated(data)),
 });
 
 const Page = (props) => {
@@ -118,7 +118,7 @@ const Page = (props) => {
        }}
        onSubmit={(values, { setSubmitting }) => {
         props.testDataUpdateProp('Global data update');
-        props.isAuthenticatedDataUpdateProp(true)
+        props.setIsAuthenticatedProp(true)
        }}
      >
        {({
