@@ -11,9 +11,12 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import GoogleIcon from "@mui/icons-material/Google";
 import Stack from "@mui/material/Stack";
-import getGlobalState from '../../stateManagement/global/globalSelector';
-import { testDataUpdate ,setIsAuthenticated} from '../../stateManagement/global/GlobalActionCreators';
-import { connect } from 'react-redux';
+import getGlobalState from "../../stateManagement/global/globalSelector";
+import {
+  testDataUpdate,
+  setIsAuthenticated,
+} from "../../stateManagement/global/GlobalActionCreators";
+import { connect } from "react-redux";
 import {
   Grid,
   Card,
@@ -28,7 +31,6 @@ import {
 import { useAuth } from "src/hooks/use-auth";
 import getAuthState from "../../stateManagement/auth/AuthSelector";
 
-
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
   testData: getGlobalState(state)?.testData,
@@ -40,7 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const Page = (props) => {
-  console.log('................', props.testData, props.isAuthenticated)
+  console.log("................", props.testData, props.isAuthenticated);
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState("email");
@@ -104,55 +106,64 @@ const Page = (props) => {
                   </Typography>
 
                   <Formik
-       initialValues={{ email: '', password: '' }}
-       validate={values => {
-         const errors = {};
-         if (!values.email) {
-           errors.email = 'Required';
-         } else if (
-           !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-         ) {
-           errors.email = 'Invalid email address';
-         }
-         return errors;
-       }}
-       onSubmit={(values, { setSubmitting }) => {
-        props.testDataUpdateProp('Global data update');
-        props.setIsAuthenticatedProp(true)
-       }}
-     >
-       {({
-         values,
-         errors,
-         touched,
-         handleChange,
-         handleBlur,
-         handleSubmit,
-         isSubmitting,
-         /* and other goodies */
-       }) => (
-         <form onSubmit={handleSubmit}>
-           <div style={{ marginTop: "1rem" }}>
+                    initialValues={{ email: "", password: "" }}
+                    validate={(values) => {
+                      const errors = {};
+                      if (!values.email) {
+                        errors.email = "Required";
+                      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                        errors.email = "Invalid email address";
+                      }
+                      return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                      props.testDataUpdateProp("Global data update");
+                      props.setIsAuthenticatedProp(true);
+                    }}
+                  >
+                    {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                      /* and other goodies */
+                    }) => (
+                      <form onSubmit={handleSubmit}>
+                        <div style={{ marginTop: "1rem" }}>
                           <label>Email address or username</label>
                           <input
-                              type="email"
-                              name="email"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.email}
-                              style={{width:"100%",fontSize:"18px",padding:"10px",border:".5px solid #9C9B9B",marginBottom:"1rem"}}
-                            />
-           {errors.email && touched.email && errors.email}
-           <label >Email address or password</label>
-           <input
-             type="password"
-             name="password"
-             onChange={handleChange}
-             onBlur={handleBlur}
-             value={values.password}
-             style={{width:"100%",fontSize:"18px",padding:"10px",border:".5px solid #9C9B9B"}}
-           />
-           {errors.password && touched.password && errors.password}
+                            type="email"
+                            name="email"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.email}
+                            style={{
+                              width: "100%",
+                              fontSize: "18px",
+                              padding: "10px",
+                              border: ".5px solid #9C9B9B",
+                              marginBottom: "1rem",
+                            }}
+                          />
+                          {errors.email && touched.email && errors.email}
+                          <label>Email address or password</label>
+                          <input
+                            type="password"
+                            name="password"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.password}
+                            style={{
+                              width: "100%",
+                              fontSize: "18px",
+                              padding: "10px",
+                              border: ".5px solid #9C9B9B",
+                            }}
+                          />
+                          {errors.password && touched.password && errors.password}
                         </div>
                         <div>
                           <FormGroup>
@@ -167,7 +178,8 @@ const Page = (props) => {
 
                         <div>
                           <Button
-                          type="submit" disabled={isSubmitting}
+                            type="submit"
+                            disabled={isSubmitting}
                             variant="contained"
                             fullWidth
                             sx={{
@@ -184,27 +196,26 @@ const Page = (props) => {
                         <Divider component="li" sx={{ marginTop: "10px" }}>
                           or
                         </Divider>
-         </form>
-       )}
-     </Formik>
-                        <Stack direction="row" spacing={2} sx={{ marginTop: "1rem" }}>
-                          <Button
-                            variant="outlined"
-                            startIcon={<GoogleIcon />}
-                            fullWidth
-                            sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
-                          >
-                            Log in with Google
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            fullWidth
-                            sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
-                          >
-                            Log in with SAML
-                          </Button>
-                        </Stack>
-                      
+                      </form>
+                    )}
+                  </Formik>
+                  <Stack direction="row" spacing={2} sx={{ marginTop: "1rem" }}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<GoogleIcon />}
+                      fullWidth
+                      sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
+                    >
+                      Log in with Google
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
+                    >
+                      Log in with SAML
+                    </Button>
+                  </Stack>
                 </CardContent>
               </Card>
             </Grid>
