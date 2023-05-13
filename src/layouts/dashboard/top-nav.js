@@ -111,68 +111,7 @@ export const TopNav = (props) => {
             >
               <Logo />
             </Box>
-            <Box
-              position="relative"
-              flex="1 1 0"
-              maxWidth="670px"
-              mx="auto"
-              
-            >
-              <TextField
-                //   sx={{
-                //   'input': {
-                //     '&::placeholder': {
-                //       textOverflow: 'ellipsis !important',
-                //       color: 'blue'
-                //      }
-                // }}
-                fullWidth
-                variant="outlined"
-                placeholder="Search Products"
-                // onChange={hanldeSearch}
-                //   InputLabelProps={{
-                //     style: { color: 'red' },
-                //  }}
-                InputProps={{
-                  sx: {
-                    height: 44,
-                    paddingRight: 0,
-                    border: "1px solid",
-                    borderRadius: 300,
-                    color: "grey.600",
-                    overflow: "hidden",
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "primary.main",
-                    },
-                    input: {
-                      "&::placeholder": {
-                        //  textOverflow: 'ellipsis !important',
-                        //  textAlign:"left"
-                        paddingLeft: "20px",
-                      },
-                    },
-                  },
-                  endAdornment: (
-                    <SearchOutlinedIcon
-                      onClick={() => {
-                        handleSearch();
-                      }}
-                    />
-                  ),
-                  // startAdornment: categoryDropdown,
-                }}
-              />
-
-              {/* {!!resultList.length && ( */}
-                <SearchResultCard elevation={2}>
-                  {/* {resultList.map((item) => ( */}
-                    {/* <Link href={`/product/search/${item}`} key={item} passHref> */}
-                    <MenuItem >All</MenuItem>
-                    {/* </Link> */}
-                  {/* ))} */}
-                </SearchResultCard>
-              {/* )} */}
-            </Box>
+            
           </Stack>
           <Stack alignItems="center" direction="row" spacing={2}>
             {/* <Tooltip title="Contacts">
