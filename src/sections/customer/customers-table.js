@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import PropTypes from "prop-types";
+import { format } from "date-fns";
+import Link from "next/link";
 import {
   Avatar,
   Box,
   Card,
+  Button,
   Checkbox,
   Stack,
   Table,
@@ -12,10 +14,10 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from 'src/components/scrollbar';
-import { getInitials } from 'src/utils/get-initials';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "src/components/scrollbar";
+import { getInitials } from "src/utils/get-initials";
 
 export const CustomersTable = (props) => {
   const {
@@ -29,14 +31,23 @@ export const CustomersTable = (props) => {
     onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
+    selected = [],
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
+  const selectedSome = selected.length > 0 && selected.length < items.length;
+  const selectedAll = items.length > 0 && selected.length === items.length;
 
   return (
     <Card>
+      <TablePagination
+        component="div"
+        count={count}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
@@ -55,30 +66,14 @@ export const CustomersTable = (props) => {
                     }}
                   />
                 </TableCell>
-                <TableCell>
-                  Name
-                </TableCell>
-                <TableCell>
-                Duration
-                </TableCell>
-                <TableCell>
-                User limit
-                </TableCell>
-                <TableCell>
-                Storage limit
-                </TableCell>
-                <TableCell>
-                Price
-                </TableCell>
-                <TableCell>
-                Details
-                </TableCell>
-                <TableCell>
-                Features
-                </TableCell>
-                <TableCell>
-                action
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>User limit</TableCell>
+                <TableCell>Storage limit</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Details</TableCell>
+                <TableCell>Features</TableCell>
+                <TableCell>action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -87,11 +82,7 @@ export const CustomersTable = (props) => {
                 // const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
 
                 return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isSelected}
-                  >
+                  <TableRow hover key={customer.id} selected={isSelected}>
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isSelected}
@@ -105,39 +96,32 @@ export const CustomersTable = (props) => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
-                      >
+                      <Stack alignItems="center" direction="row" spacing={2}>
                         {/* <Avatar src={customer.avatar}> */}
-                          {getInitials(customer.name)}
+                        {getInitials(customer.name)}
                         {/* </Avatar> */}
-                        <Typography variant="subtitle2">
-                          {customer.name}
-                        </Typography>
+                        <Typography variant="subtitle2">{customer.name}</Typography>
                       </Stack>
                     </TableCell>
+                    <TableCell>{customer.duration}</TableCell>
+                    <TableCell>{customer.user_limit}</TableCell>
+                    <TableCell>{customer.storage_limit}</TableCell>
+                    <TableCell>{customer.Price}</TableCell>
+                    <TableCell>{customer.details}</TableCell>
+                    <TableCell>{customer.features}</TableCell>
                     <TableCell>
-                      {customer.duration}
-                    </TableCell>
-                    <TableCell>
-                      {customer.user_limit}
-                    </TableCell>
-                    <TableCell>
-                      {customer.storage_limit}
-                    </TableCell>
-                    <TableCell>
-                      {customer.Price}
-                    </TableCell>
-                    <TableCell>
-                      {customer.details}
-                    </TableCell>
-                    <TableCell>
-                    {customer.features}
-                    </TableCell>
-                    <TableCell>
-                    <button>Details</button>
+                      <Link href={`subscription/${customer.id}`}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          background: "#00467a",
+                          color: "white",
+                          border: "",
+                        }}
+                      >
+                        Details
+                      </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 );
@@ -170,5 +154,5 @@ CustomersTable.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
+  selected: PropTypes.array,
 };
