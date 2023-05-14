@@ -25,58 +25,56 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Stack spacing={3}>
-            <Stack direction="row" justifyContent="space-between" spacing={4}>
-              <Stack spacing={1}>
-                <Typography variant="h4">Subscription Details</Typography>
-              </Stack>
-             
-            </Stack>
-          </Stack>
+          
           <Card sx={{marginTop:"3rem"}}>
+          <Typography variant="h6" sx={{marginLeft:"4.8rem",padding:"1rem"}}> Details</Typography>
           <Box sx={{ flexGrow: 1 ,width:"80%",margin:"0 auto",marginTop:"2rem"}}>
-          <Grid container spacing={2}>
-        <Grid  xs={4}>
-          Name :
-        </Grid>
-        <Grid  xs={8}>
           
+                
+             
+          <Grid container spacing={2} sx={{color:"#545353"}}>
+            
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+         Name
         </Grid>
-        <Grid  xs={4}>
-        DURATION :
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+        Carson Darrin
         </Grid>
-        <Grid  xs={8}>
-          
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+        DURATION 
         </Grid>
-        <Grid  xs={4}>
-        USER LIMIT :
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+        12-04-2023
         </Grid>
-        <Grid  xs={8}>
-          
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+        USER LIMIT 
         </Grid>
-        <Grid  xs={4}>
-        STORAGE LIMIT :
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+          3
         </Grid>
-        <Grid  xs={8}>
-          
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+        STORAGE LIMIT 
         </Grid>
-        <Grid  xs={4}>
-        PRICE :
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+          40gb
         </Grid>
-        <Grid  xs={8}>
-          
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+        PRICE 
         </Grid>
-        <Grid  xs={4}>
-        DETAILS :
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+          500
         </Grid>
-        <Grid  xs={8}>
-          
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+        DETAILS 
         </Grid>
-        <Grid  xs={4}>
-        FEATURES :
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+        ghasd haghgda ahgahgda hagd
         </Grid>
-        <Grid  xs={8}>
-          
+        <Grid  xs={4} sx={{marginBottom:"20px"}}>
+        FEATURES 
+        </Grid>
+        <Grid  xs={8} sx={{marginBottom:"20px"}}>
+          EN Bn
         </Grid>
 
       </Grid>

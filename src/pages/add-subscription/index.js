@@ -215,7 +215,7 @@ const Page = () => {
                         
                       </Grid>
                       <Grid item xs={6}>
-
+                      
                       <div>
                         {touched.Duration && errors.Duration && (
                             <div style={{ color: 'red', fontSize: '12px' }}>{errors.Duration}</div>
