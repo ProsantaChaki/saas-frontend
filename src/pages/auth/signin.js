@@ -65,7 +65,7 @@ const Page = ({ isAuthenticated, test }) => {
         style={{ textAlign: "center", marginTop: "4rem", marginBottom: "3rem" }}
       >
         <div>
-          <Image src="/assets/logos/logo.svg" alt="logo" width={250} height={60} />
+          <Image src="/assets/logos/logo.jpeg" alt="logo" width={250} height={150} />
         </div>
       </div>
 

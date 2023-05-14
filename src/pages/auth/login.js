@@ -62,14 +62,14 @@ const Page = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       props.testDataUpdateProp('Global data update')
-     /* try {
+      try {
         await auth.signIn(values.email, values.password);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
-      }*/
+      }
     }
   });
 
@@ -92,7 +92,7 @@ const Page = (props) => {
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Login | Micro Health +
         </title>
       </Head>
       <Box

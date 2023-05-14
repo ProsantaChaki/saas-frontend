@@ -57,7 +57,7 @@ const AccountSettings = () => {
 
       <Head>
         <title>
-          Settings | Devias Kit
+          Settings | Micro Health +
         </title>
       </Head>
       <Box
