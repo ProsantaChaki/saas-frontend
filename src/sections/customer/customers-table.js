@@ -59,23 +59,32 @@ export const CustomersTable = (props) => {
                   Name
                 </TableCell>
                 <TableCell>
-                  Email
+                Duration
                 </TableCell>
                 <TableCell>
-                  Location
+                User limit
                 </TableCell>
                 <TableCell>
-                  Phone
+                Storage limit
                 </TableCell>
                 <TableCell>
-                  Signed Up
+                Price
+                </TableCell>
+                <TableCell>
+                Details
+                </TableCell>
+                <TableCell>
+                Features
+                </TableCell>
+                <TableCell>
+                action
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((customer) => {
                 const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
+                // const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
@@ -101,25 +110,34 @@ export const CustomersTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={customer.avatar}>
+                        {/* <Avatar src={customer.avatar}> */}
                           {getInitials(customer.name)}
-                        </Avatar>
+                        {/* </Avatar> */}
                         <Typography variant="subtitle2">
                           {customer.name}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {customer.duration}
                     </TableCell>
                     <TableCell>
-                      {customer.address.city}, {customer.address.state}, {customer.address.country}
+                      {customer.user_limit}
                     </TableCell>
                     <TableCell>
-                      {customer.phone}
+                      {customer.storage_limit}
                     </TableCell>
                     <TableCell>
-                      {createdAt}
+                      {customer.Price}
+                    </TableCell>
+                    <TableCell>
+                      {customer.details}
+                    </TableCell>
+                    <TableCell>
+                    {customer.features}
+                    </TableCell>
+                    <TableCell>
+                    <button>Details</button>
                     </TableCell>
                   </TableRow>
                 );
