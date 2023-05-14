@@ -19,7 +19,7 @@ export const items = [
     )
   },
   {
-    title: 'Subscription',
+    title: 'Subscription ',
     path: '/subscription',
     icon: (
       <SvgIcon fontSize="small">
@@ -27,9 +27,10 @@ export const items = [
       </SvgIcon>
     )
   },
+ 
   {
-    title: 'Subscription',
-    path: '/subscription',
+    title: 'Subscription Request',
+    path: '/subscription-request',
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
