@@ -19,7 +19,7 @@ import {
 import { Scrollbar } from "src/components/scrollbar";
 import { getInitials } from "src/utils/get-initials";
 
-export const CustomersTable = (props) => {
+export const SubscriptionRequestTable = (props) => {
   const {
     count = 0,
     items = [],
@@ -67,12 +67,12 @@ export const CustomersTable = (props) => {
                   />
                 </TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Duration</TableCell>
-                <TableCell>User limit</TableCell>
-                <TableCell>Storage limit</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Details</TableCell>
-                <TableCell>Features</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>subscription plan id</TableCell>
+                <TableCell>Mobile no</TableCell>
+                <TableCell>Country</TableCell>
+                <TableCell>status</TableCell>
+                <TableCell>Message</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -103,14 +103,14 @@ export const CustomersTable = (props) => {
                         <Typography variant="subtitle2">{customer.name}</Typography>
                       </Stack>
                     </TableCell>
-                    <TableCell>{customer.duration}</TableCell>
-                    <TableCell>{customer.user_limit}</TableCell>
-                    <TableCell>{customer.storage_limit}</TableCell>
-                    <TableCell>{customer.Price}</TableCell>
-                    <TableCell>{customer.details}</TableCell>
-                    <TableCell>{customer.features}</TableCell>
+                    <TableCell>{customer.Email}</TableCell>
+                    <TableCell>{customer.subscription_plan_id}</TableCell>
+                    <TableCell>{customer.Mobile_no}</TableCell>
+                    <TableCell>{customer.Country}</TableCell>
+                    <TableCell>{customer.status}</TableCell>
+                    <TableCell>{customer.Message}</TableCell>
                     <TableCell>
-                      <Link href={`subscription/${customer.id}`}>
+                      <Link href={`subscription-request/${customer.id}`}>
                       <Button
                         variant="contained"
                         sx={{
@@ -119,7 +119,7 @@ export const CustomersTable = (props) => {
                           border: "",
                         }}
                       >
-                        Details
+                        View
                       </Button>
                       </Link>
                     </TableCell>
@@ -143,7 +143,7 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+SubscriptionRequestTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,
