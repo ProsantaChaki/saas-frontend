@@ -30,7 +30,7 @@ const App = (props) => {
       <CacheProvider value={emotionCache}>
       <Head>
         <title>
-          Devias Kit
+          Micro Health +
         </title>
         <meta
           name="viewport"

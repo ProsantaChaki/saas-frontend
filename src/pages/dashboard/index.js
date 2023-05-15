@@ -17,7 +17,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Overview | Devias Kit
+        Overview | Micro Health +
       </title>
     </Head>
     <Box
