@@ -57,7 +57,7 @@ export default function (state = initialState, action) {
     case IS_AUTHENTICATED:
       return {
         ...state,
-        isAuthenticated: payload.status,
+        isAuthenticated: payload.message,
       };
     case COMMON_MODAL_DATA_SET:
       return {
