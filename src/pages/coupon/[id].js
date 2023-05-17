@@ -3,9 +3,8 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 import { styled } from '@mui/material/styles';
-import { Box, Button, Container, Stack, Card, Typography,Paper ,Grid  ,Divider} from "@mui/material";
+import { Box, Button, Container, Stack, Card, Typography,Paper ,Grid  } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { padding } from "@mui/system";
 
 
 
@@ -27,7 +26,7 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           
-          <Card sx={{marginTop:"3rem",width:"80%", margin:"0 auto",background:"rgba(80, 6, 108,.1)"}}>
+          <Card sx={{marginTop:"3rem"}}>
           <Typography variant="h6" sx={{marginLeft:"4.8rem",padding:"1rem"}}> Details</Typography>
           <Box sx={{ flexGrow: 1 ,width:"80%",margin:"0 auto",marginTop:"2rem"}}>
           
@@ -36,65 +35,51 @@ const Page = () => {
           <Grid container spacing={2} sx={{color:"#545353"}}>
             
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-         Name
-         <Divider/>
+        code
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        Carson Darrin
-        <Divider/>
+        Ad001sd
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-        Email
-        <Divider/>
+        Amount 
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        carson@gmail.com
-        <Divider/>
+        1580
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-        Subscription Plan Id
-        <Divider/>
+        Amount Type 
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        001
-        <Divider/>
+        percentage
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-        Mobile No
-        <Divider/>
+        Start Date
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        01755828281
-        <Divider/>
+        12-04-2023
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-        Country 
-        <Divider/>
+        Expire Date 
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-          India
-          <Divider/>
+        12-04-2023
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-        status
-        <Divider/>
+        User Type 
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        Active
-        <Divider/>
+        All
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
-        Message 
-        <Divider/>
+        Subscription Plan Type
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        ghasd haghgda ahgahgda hagd
-        <Divider/>
+          All
         </Grid>
 
       </Grid>
 
-      <Link href="">
+      <Link href="/add-subscription">
                       <Button
                         variant="contained"
                         sx={{
@@ -106,7 +91,7 @@ const Page = () => {
                           marginBottom:"1rem"
                         }}
                       >
-                        Approve
+                        Edit
                       </Button>
                       </Link>
 
@@ -123,10 +108,9 @@ const Page = () => {
                           margin:"1rem"
                         }}
                       >
-                        Cancel
+                        DELETE
                       </Button>
                       </Link>
-
 
           </Box>
           </Card>

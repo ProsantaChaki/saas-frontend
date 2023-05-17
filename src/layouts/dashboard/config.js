@@ -38,6 +38,15 @@ export const items = [
     )
   },
   {
+    title: 'Coupon',
+    path: '/coupon',
+    icon: (
+      <SvgIcon fontSize="small">
+        <UsersIcon />
+      </SvgIcon>
+    )
+  },
+  {
     title: 'Customers',
     path: '/customers',
     icon: (
