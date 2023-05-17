@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
-import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
+import { Box, Container, Unstable_Grid2 as Grid ,} from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewBudget } from 'src/sections/overview/overview-budget';
 import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
@@ -10,6 +10,7 @@ import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-prog
 import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-customers';
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
+import { Modal } from 'src/components/Modal';
 
 const now = new Date();
 
@@ -75,6 +76,12 @@ const Page = () => (
               sx={{ height: '100%' }}
               value="$15k"
             />
+          </Grid>
+          <Grid
+            xs={12}
+            lg={12}
+          >
+            <Modal/>
           </Grid>
           <Grid
             xs={12}
