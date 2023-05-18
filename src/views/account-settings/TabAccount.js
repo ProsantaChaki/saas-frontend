@@ -17,6 +17,8 @@ import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
+import { SvgIcon,  } from "@mui/material";
+import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
@@ -63,11 +65,28 @@ const TabAccount = () => {
     <CardContent>
       <form>
         <Grid container spacing={7}>
-          <Grid item xs={12} sx={{ marginTop: 4.8, marginBottom: 3 }}>
+          <Grid item xs={12} >
+            <Box sx={{ display: 'flex', alignItems: 'center',}}>
+              <ImgStyled src="https://e0.pxfuel.com/wallpapers/932/376/desktop-wallpaper-stylish-boys-cool-d-profile-pics-for-facebook-whatsapp-pretty-boys.jpg" alt='Profile Pic' sx={{ margin:"0 auto"}}/>
+              
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <ImgStyled src={imgSrc} alt='Profile Pic' />
-              <Box>
-                <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+              
+              <Box sx={{margin:"0 auto"}}>
+                <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'
+                 startIcon={
+                  <SvgIcon fontSize="small">
+                    <PlusIcon />
+                  </SvgIcon>
+                } 
+                sx={{
+                      background: "#00467a",
+                      color: "white",
+                      marginLeft:"50px "
+                    }}>
                   Upload New Photo
                   <input
                     hidden
@@ -77,9 +96,9 @@ const TabAccount = () => {
                     id='account-settings-upload-image'
                   />
                 </ButtonStyled>
-                <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/avatars/1.png')}>
+                {/* <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/avatars/1.png')}>
                   Reset
-                </ResetButtonStyled>
+                </ResetButtonStyled> */}
                 <Typography variant='body2' sx={{ marginTop: 5 }}>
                   Allowed PNG or JPEG. Max size of 800K.
                 </Typography>
@@ -103,52 +122,32 @@ const TabAccount = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select label='Role' defaultValue='admin'>
-                <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='author'>Author</MenuItem>
-                <MenuItem value='editor'>Editor</MenuItem>
-                <MenuItem value='maintainer'>Maintainer</MenuItem>
-                <MenuItem value='subscriber'>Subscriber</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              type='number'
+              label='Phone'
+              defaultValue='01757820284'
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Status</InputLabel>
-              <Select label='Status' defaultValue='active'>
-                <MenuItem value='active'>Active</MenuItem>
-                <MenuItem value='inactive'>Inactive</MenuItem>
-                <MenuItem value='pending'>Pending</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth
+              type='password'
+              label='Password'
+              defaultValue='123456'
+            />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
-          </Grid>
+          
+          
 
-          {openAlert ? (
-            <Grid item xs={12} sx={{ mb: 3 }}>
-              <Alert
-                severity='warning'
-                sx={{ '& a': { fontWeight: 400 } }}
-                action={
-                  <IconButton size='small' color='inherit' aria-label='close' onClick={() => setOpenAlert(false)}>
-                    <Close fontSize='inherit' />
-                  </IconButton>
-                }
-              >
-                <AlertTitle>Your email is not confirmed. Please check your inbox.</AlertTitle>
-                <Link href='/' onClick={e => e.preventDefault()}>
-                  Resend Confirmation
-                </Link>
-              </Alert>
-            </Grid>
-          ) : null}
+          
 
           <Grid item xs={12}>
-            <Button variant='contained' sx={{ marginRight: 3.5 }}>
+            <Button variant='contained' sx={{
+                      background: "#00467a",
+                      color: "white",
+                      marginRight: 3.5 
+                    }}>
               Save Changes
             </Button>
             <Button type='reset' variant='outlined' color='secondary'>
