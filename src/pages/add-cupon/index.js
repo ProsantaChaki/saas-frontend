@@ -1,21 +1,24 @@
-import { useCallback, useMemo, useState } from "react";
-import Link from "next/link";
+import {  useEffect, useState } from "react";
 import Head from "next/head";
-import { subDays, subHours } from "date-fns";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
-import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import { Box, Button, Container, Stack, Grid, Typography ,TextField,Autocomplete,Card} from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Grid,
+  Typography,
+  TextField,
+  Autocomplete,
+  Card,
+  InputAdornment,
+  Chip,
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersTable } from "src/sections/customer/customers-table";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { applyPagination } from "src/utils/apply-pagination";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,7 +29,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Page = () => {
-
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -46,46 +48,130 @@ const Page = () => {
     account_name: "",
     routing_number: "",
   };
-  
+
   // form field validation schema
   const validationSchema = Yup.object().shape({
     password: Yup.string()
       .min(6, "Password must be 6 character length")
       .required("Password is required!"),
     email: Yup.string()
-    .email("Invalid Email address")
+      .email("Invalid Email address")
       .email("Invalid Email address")
       .required("Email is required!"),
-  
-      firstName: Yup.string().required("FirstName is required!"),
-      lastName: Yup.string().required("LastName is required!"),
-      userName: Yup.string().required("Uer Name is required!"),
-      phone: Yup.string().required("Phone is required!"),
-      branch_id: Yup.string().required("branch is required!"),
+
+    firstName: Yup.string().required("FirstName is required!"),
+    lastName: Yup.string().required("LastName is required!"),
+    userName: Yup.string().required("Uer Name is required!"),
+    phone: Yup.string().required("Phone is required!"),
+    branch_id: Yup.string().required("branch is required!"),
   });
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
   const [selectedOption2, setSelectedOption2] = useState(null);
   const [options2, setOptions2] = useState([]);
-  const [selectedOption3, setSelectedOption3] = useState(null);
+  const [selectedOption3, setSelectedOption3] = useState([]);
   const [options3, setOptions3] = useState([]);
   const [selectedOption4, setSelectedOption4] = useState(null);
   const [options4, setOptions4] = useState([]);
-  const [selectedOption5, setSelectedOption5] = useState(null);
+  const [selectedOption5, setSelectedOption5] = useState([]);
   const [options5, setOptions5] = useState([]);
 
+  const handleSelect = (event, values) => {
+    setSelectedOption3(values);
+  };
+
+  const handleRemove = (valueToRemove) => {
+    setSelectedOption3((prevSelectedValues) =>
+      prevSelectedValues.filter((value) => value.label !== valueToRemove.label)
+    );
+  };
+
+  const handleSelect2 = (event, values) => {
+    setSelectedOption5(values);
+  };
+
+  const handleRemove2 = (valueToRemove) => {
+    setSelectedOption5((prevSelectedValues) =>
+      prevSelectedValues.filter((value) => value.label !== valueToRemove.label)
+    );
+  };
+
+  const amount_type = [
+    {
+      id: "1",
+      name: "Percentage",
+    },
+    {
+      id: "2",
+      name: "Flat",
+    },
+  ];
+
+  const user_type = [
+    {
+      id: "1",
+      name: "All user",
+    },
+    {
+      id: "2",
+      name: "Specific user",
+    },
+  ];
+
+  const availableValues = [
+    { label: "Apple" },
+    { label: "Banana" },
+    { label: "Cherry" },
+    { label: "Durian" },
+    { label: "Elderberry" },
+  ];
+
+  const subscription_plan = [
+    {
+      id: "1",
+      name: "All subscription",
+    },
+    {
+      id: "2",
+      name: "Specific subscription",
+    },
+  ];
+
+  //seve localStorage
+  const storedValue = localStorage.getItem("user_type");
+  const storedValue2 = localStorage.getItem("subscription_plan");
+  const parsedValue = JSON.parse(storedValue);
+  const parsedValue2 = JSON.parse(storedValue2);
+  //show hide
+  const [show1, setShow1] = useState([]);
+  const [show2, setShow2] = useState([]);
+  useEffect(() => {
+    setShow1(parsedValue);
+    setShow2(parsedValue2);
+  }, [parsedValue, parsedValue2]);
+  console.log(show1, "show1");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setOptions(amount_type);
+      setOptions2(user_type);
+      setOptions4(subscription_plan);
+    };
+    fetchData();
+  }, []);
+
+  console.log(options, "options");
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    
   };
   return (
     <>
       <Head>
         <title>Add Coupon</title>
       </Head>
-      
+
       <Box
         component="main"
         sx={{
@@ -101,195 +187,312 @@ const Page = () => {
               </Stack>
             </Stack>
           </Stack>
-          <Card sx={{marginTop:"3rem"}}>
-          <Box sx={{ flexGrow: 1 ,width:"80%",margin:"0 auto",marginTop:"2rem"}}>
-          
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-              <Formik
-                initialValues={initialValues}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                {({ values, errors, touched, setFieldValue }) => (
-                  <Form enctype="multipart/form-data">
-                    <Grid
-                      container
-                      rowSpacing={1}
-                      columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                    >
-                      <Grid item xs={6}>
-                        <div>
-                        {touched.name && errors.name && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.name}</div>
-                          )}
-                          <Field
-                            size="small"
-                            sx={{ mb: 3 ,}}
-                            name="name"
-                            as={TextField}
-                            label="Name"
-                            type="text"
-                            fullWidth
-                          />
-                          
-                        </div>
-                       
-                        <div>
-                        {touched.User_limit && errors.User_limit && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.User_limit}</div>
-                          )}
-                        <Field
-                          size="small"
-                          sx={{ mb: 3 }}
-                          name="User_limit"
-                          as={TextField}
-                          label="User limit"
-                          type="number"
-                          fullWidth
-                        />
-                        </div>
-                        
-                        <div>
-                        {touched.Price && errors.Price && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.Price}</div>
-                          )}
-                        <Field
-                          size="small"
-                          sx={{ mb: 3 }}
-                          name="Price"
-                          as={TextField}
-                          label="Price"
-                          type="number"
-                          fullWidth
-                        />
-                        </div>
-                        
+          <Card sx={{ marginTop: "3rem" }}>
+            <Box sx={{ flexGrow: 1, width: "80%", margin: "0 auto", marginTop: "2rem" }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Formik
+                    initialValues={initialValues}
+                    onSubmit={handleSubmit}
+                    validationSchema={validationSchema}
+                  >
+                    {({ values, errors, touched, setFieldValue }) => (
+                      <Form enctype="multipart/form-data">
+                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                          <Grid item xs={6}>
+                            <div>
+                              {touched.name && errors.name && (
+                                <div style={{ color: "red", fontSize: "12px" }}>{errors.name}</div>
+                              )}
+                              <Field
+                                size="small"
+                                sx={{ mb: 3 }}
+                                name="code"
+                                as={TextField}
+                                label="Code"
+                                type="text"
+                                fullWidth
+                              />
+                            </div>
 
-                          <Field name="zone_divisions_id">
-                          {({ field, form }) => (
-                            <Autocomplete
-                              {...field}
-                              value={selectedOption}
-                              onChange={(event, newValue) => {
-                                setSelectedOption(newValue);
-                                form.setFieldValue(
-                                  "zone_divisions_id",
-                                  newValue ? newValue.zone_divisions : ""
-                                );
-                                form.setFieldValue(
-                                  "zone_divisions_Id",
-                                  newValue ? newValue.zone_divisions_id : ""
-                                );
+                            <div>
+                              {touched.User_limit && errors.User_limit && (
+                                <div style={{ color: "red", fontSize: "12px" }}>
+                                  {errors.User_limit}
+                                </div>
+                              )}
+                              <Field
+                                size="small"
+                                sx={{ mb: 3 }}
+                                name="amount"
+                                as={TextField}
+                                label="Amount"
+                                type="number"
+                                fullWidth
+                              />
+                            </div>
 
-                                var filter = filterItems(
-                                  options2,
-                                  "zone_divisions_id",
-                                  newValue.zone_divisions_id
-                                );
-                                setZone_districtsList_recipient_filtered(filter);
-                                console.log('=> zone_districtsList_recipient', zone_districtsList_recipient)
-                              }}
-                              options={options}
-                              getOptionLabel={(option) => option.zone_divisions}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="features"
-                                  error={
-                                    form.errors.zone_divisions_id &&
-                                    form.touched.zone_divisions_id
-                                  }
-                                  helperText={
-                                    form.errors.zone_divisions_id &&
-                                    form.touched.zone_divisions_id &&
-                                    form.errors.zone_divisions_id
-                                  }
+                            <Field name="amount_type">
+                              {({ field, form }) => (
+                                <Autocomplete
+                                  {...field}
+                                  value={selectedOption}
+                                  onChange={(event, newValue) => {
+                                    setSelectedOption(newValue);
+                                    form.setFieldValue(
+                                      "amount_type",
+                                      newValue ? newValue.name : ""
+                                    );
+                                    form.setFieldValue(
+                                      "amount_typeID",
+                                      newValue ? newValue.id : ""
+                                    );
+                                  }}
+                                  options={options}
+                                  getOptionLabel={(option) => option.name}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select amount type"
+                                      error={form.errors.userType && form.touched.userType}
+                                      helperText={
+                                        form.errors.userType &&
+                                        form.touched.userType &&
+                                        form.errors.userType
+                                      }
+                                      sx={{
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                      }}
+                                    />
+                                  )}
                                 />
                               )}
-                            />
-                          )}
-                        </Field>
+                            </Field>
 
-                        {/* {error && <div>{error}</div>} */}
-                        
-                      </Grid>
-                      <Grid item xs={6}>
-                      
-                      <div>
-                        {touched.Duration && errors.Duration && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.Duration}</div>
-                          )}
-                        <Field
-                          size="small"
-                          sx={{ mb: 3 }}
-                          name="Duration"
-                          as={TextField}
-                          type="date"
-                          fullWidth
-                        />
-                        </div>
+                            {/* {error && <div>{error}</div>} */}
 
-                        <div>
-                        {touched.storage_limit && errors.storage_limit && (
-                            <div  style={{ color: 'red', fontSize: '12px' }}>{errors.storage_limit}</div>
-                          )}
-                          <Field
-                            size="small"
-                            sx={{ mb: 3 }}
-                            name="storage_limit"
-                            as={TextField}
-                            label="Storage limit"
-                            type="text"
+                            <div>
+                              {touched.Price && errors.Price && (
+                                <div style={{ color: "red", fontSize: "12px" }}>{errors.Price}</div>
+                              )}
+
+                              <Field
+                                size="small"
+                                sx={{ mb: 3 }}
+                                name="start_date"
+                                as={TextField}
+                                type="Date"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">Start Date</InputAdornment>
+                                  ),
+                                }}
+                                fullWidth
+                              />
+                            </div>
+
+                            <div>
+                              {touched.Duration && errors.Duration && (
+                                <div style={{ color: "red", fontSize: "12px" }}>
+                                  {errors.Duration}
+                                </div>
+                              )}
+                              <Field
+                                size="small"
+                                sx={{ mb: 3 }}
+                                name="expire_date"
+                                as={TextField}
+                                type="date"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">Expire Date</InputAdornment>
+                                  ),
+                                }}
+                                fullWidth
+                              />
+                            </div>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Field name="user_type">
+                              {({ field, form }) => (
+                                <Autocomplete
+                                  {...field}
+                                  value={selectedOption2}
+                                  onChange={(event, newValue) => {
+                                    localStorage.setItem(
+                                      "user_type",
+                                      JSON.stringify(newValue.name)
+                                    );
+                                    setSelectedOption2(newValue);
+                                    form.setFieldValue("user_type", newValue ? newValue.name : "");
+                                    form.setFieldValue("user_typeID", newValue ? newValue.id : "");
+                                  }}
+                                  options={options2}
+                                  getOptionLabel={(option) => option.name}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select user type"
+                                      error={form.errors.userType && form.touched.userType}
+                                      helperText={
+                                        form.errors.userType &&
+                                        form.touched.userType &&
+                                        form.errors.userType
+                                      }
+                                      sx={{
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                      }}
+                                    />
+                                  )}
+                                />
+                              )}
+                            </Field>
+
+                            {/* {error && <div>{error}</div>} */}
+
+                            {show1 === "Specific user" ? (
+                              <div>
+                                <Autocomplete
+                                  multiple
+                                  options={availableValues}
+                                  getOptionLabel={(option) => option.label}
+                                  value={selectedOption5}
+                                  onChange={handleSelect2}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select multiple users"
+                                      variant="outlined"
+                                      sx={{
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                      }}
+                                    />
+                                  )}
+                                  renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                      <Chip
+                                        key={index}
+                                        label={option.label}
+                                        onDelete={() => handleRemove2(option)}
+                                        {...getTagProps({ index })}
+                                      />
+                                    ))
+                                  }
+                                />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+
+                            <Field name="subscription_plan">
+                              {({ field, form }) => (
+                                <Autocomplete
+                                  {...field}
+                                  value={selectedOption4}
+                                  onChange={(event, newValue) => {
+                                    localStorage.setItem(
+                                      "subscription_plan",
+                                      JSON.stringify(newValue.name)
+                                    );
+                                    setSelectedOption4(newValue);
+                                    form.setFieldValue(
+                                      "subscription_plan",
+                                      newValue ? newValue.name : ""
+                                    );
+                                    form.setFieldValue(
+                                      "subscription_plan_id",
+                                      newValue ? newValue.id : ""
+                                    );
+                                  }}
+                                  options={options4}
+                                  getOptionLabel={(option) => option.name}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select user type"
+                                      error={form.errors.userType && form.touched.userType}
+                                      helperText={
+                                        form.errors.userType &&
+                                        form.touched.userType &&
+                                        form.errors.userType
+                                      }
+                                      sx={{
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                      }}
+                                    />
+                                  )}
+                                />
+                              )}
+                            </Field>
+
+                            {/* {error && <div>{error}</div>} */}
+
+                            {show1 === "Specific user" ? (
+                              <div>
+                                <Autocomplete
+                                  multiple
+                                  options={availableValues}
+                                  getOptionLabel={(option) => option.label}
+                                  value={selectedOption3}
+                                  onChange={handleSelect}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select multiple users"
+                                      variant="outlined"
+                                      sx={{
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                      }}
+                                    />
+                                  )}
+                                  renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                      <Chip
+                                        key={index}
+                                        label={option.label}
+                                        onDelete={() => handleRemove(option)}
+                                        {...getTagProps({ index })}
+                                      />
+                                    ))
+                                  }
+                                />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                          </Grid>
+                        </Grid>
+                        <div style={{ width: "50%", margin: "0 auto" }}>
+                          <LoadingButton
                             fullWidth
-                          />
-                          
+                            type="submit"
+                            color="primary"
+                            // loading={loading}
+                            variant="contained"
+                            sx={{
+                              background: "#00467a",
+                              color: "white",
+                              mb: 2,
+                              mt: 5,
+                            }}
+                          >
+                            Submit
+                          </LoadingButton>
                         </div>
-                        <Field
-                          size="small"
-                          sx={{ mb: 3 }}
-                          name="details"
-                          as={TextField}
-                          label="Details"
-                          
-                          multiline
-                          rows={4}
-                          type="text"
-                          fullWidth
-                        />
-                        
-                      </Grid>
-                    </Grid>
-                    <div style={{width:"50%",margin:"0 auto"}}>
-                    <LoadingButton
-                      fullWidth
-                      type="submit"
-                      color="primary"
-                      // loading={loading}
-                      variant="contained"
-                      sx={{
-                        background: "#00467a",
-                        color: "white",
-                        mb: 2, mt: 5 
-                      }}
-                    >
-                      Submit
-                    </LoadingButton>
-                   
-                    </div>
-                   
-                  </Form>
-                )}
-              </Formik>
+                      </Form>
+                    )}
+                  </Formik>
+                </Grid>
               </Grid>
-              
-            </Grid>
-            
-          </Box>
+            </Box>
           </Card>
         </Container>
       </Box>
-    
     </>
   );
 };
