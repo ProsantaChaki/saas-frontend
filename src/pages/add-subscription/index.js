@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import { Box, Button, Container, Stack, Grid, Typography ,TextField,Autocomplete,Card} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -45,27 +45,26 @@ const Page = (props) => {
     "status":"1",
     "details": "Access anytime and anywhere Manage personal health records Upload documents and images Search Doctors"
   }
-
+  const featuresData = [
+    {
+      id: "1",
+      name: "EN",
+    },
+    {
+      id: "2",
+      name: "BN",
+    },
+  ];
 
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    userName: "",
-    email: "",
-    password: "",
-    phone: "",
-    address: "",
-    zone_divisions_Id: "",
-    zone_districts_Id: "",
-    userTypeId: "",
-    branch_id: "",
-    payment_type: "",
-    bank_number: "",
-    operator_number: "",
-    bank_name: "",
-    account_name: "",
-    routing_number: "",
+    name: "",
+    User_limit: "",
+    Price: "",
+    features: "",
+    Duration: "",
+    storage_limit: "",
+    details: "",
   };
 
   const storeSubscription=(data)=>{
@@ -77,39 +76,37 @@ const Page = (props) => {
     })
   }
 
-  storeSubscription(dummySubscriptionData)
+  // storeSubscription(dummySubscriptionData)
 
   // form field validation schema
   const validationSchema = Yup.object().shape({
-    password: Yup.string()
-      .min(6, "Password must be 6 character length")
-      .required("Password is required!"),
-    email: Yup.string()
-    .email("Invalid Email address")
-      .email("Invalid Email address")
-      .required("Email is required!"),
-
-      firstName: Yup.string().required("FirstName is required!"),
-      lastName: Yup.string().required("LastName is required!"),
-      userName: Yup.string().required("Uer Name is required!"),
-      phone: Yup.string().required("Phone is required!"),
-      branch_id: Yup.string().required("branch is required!"),
+    
+      name: Yup.string().required("Name is required!"),
+      User_limit: Yup.string().required("User limit is required!"),
+      Price: Yup.string().required("Price is required!"),
+      features: Yup.string().required("features is required!"),
+      Duration: Yup.string().required("Duration is required!"),
+      storage_limit: Yup.string().required("Storage limit is required!"),
+      details: Yup.string().required("Details is required!"),
   });
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
-  const [selectedOption2, setSelectedOption2] = useState(null);
-  const [options2, setOptions2] = useState([]);
-  const [selectedOption3, setSelectedOption3] = useState(null);
-  const [options3, setOptions3] = useState([]);
-  const [selectedOption4, setSelectedOption4] = useState(null);
-  const [options4, setOptions4] = useState([]);
-  const [selectedOption5, setSelectedOption5] = useState(null);
-  const [options5, setOptions5] = useState([]);
+  // const [selectedOption2, setSelectedOption2] = useState(null);
+  // const [options2, setOptions2] = useState([]);
+  // const [options5, setOptions5] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setOptions(featuresData);
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = async (values) => {
-    setLoading(true);
+    // setLoading(true);
+    console.log(values);
+    storeSubscription(values);
 
   };
   return (
@@ -198,50 +195,44 @@ const Page = (props) => {
                         </div>
 
 
-                          <Field name="zone_divisions_id">
-                          {({ field, form }) => (
-                            <Autocomplete
-                              {...field}
-                              value={selectedOption}
-                              onChange={(event, newValue) => {
-                                setSelectedOption(newValue);
-                                form.setFieldValue(
-                                  "zone_divisions_id",
-                                  newValue ? newValue.zone_divisions : ""
-                                );
-                                form.setFieldValue(
-                                  "zone_divisions_Id",
-                                  newValue ? newValue.zone_divisions_id : ""
-                                );
-
-                                var filter = filterItems(
-                                  options2,
-                                  "zone_divisions_id",
-                                  newValue.zone_divisions_id
-                                );
-                                setZone_districtsList_recipient_filtered(filter);
-                                console.log('=> zone_districtsList_recipient', zone_districtsList_recipient)
-                              }}
-                              options={options}
-                              getOptionLabel={(option) => option.zone_divisions}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="features"
-                                  error={
-                                    form.errors.zone_divisions_id &&
-                                    form.touched.zone_divisions_id
-                                  }
-                                  helperText={
-                                    form.errors.zone_divisions_id &&
-                                    form.touched.zone_divisions_id &&
-                                    form.errors.zone_divisions_id
-                                  }
+                          
+                          <Field name="features">
+                              {({ field, form }) => (
+                                <Autocomplete
+                                  {...field}
+                                  value={selectedOption}
+                                  onChange={(event, newValue) => {
+                                    setSelectedOption(newValue);
+                                    form.setFieldValue(
+                                      "features",
+                                      newValue ? newValue.name : ""
+                                    );
+                                    form.setFieldValue(
+                                      "features",
+                                      newValue ? newValue.id : ""
+                                    );
+                                  }}
+                                  options={options}
+                                  getOptionLabel={(option) => option.name}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select features"
+                                      error={form.errors.userType && form.touched.userType}
+                                      helperText={
+                                        form.errors.userType &&
+                                        form.touched.userType &&
+                                        form.errors.userType
+                                      }
+                                      sx={{
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                      }}
+                                    />
+                                  )}
                                 />
                               )}
-                            />
-                          )}
-                        </Field>
+                            </Field>
 
                         {/* {error && <div>{error}</div>} */}
 
@@ -277,18 +268,25 @@ const Page = (props) => {
                           />
 
                         </div>
-                        <Field
-                          size="small"
-                          sx={{ mb: 3 }}
-                          name="details"
-                          as={TextField}
-                          label="Details"
+                        <div>
+                        {touched.storage_limit && errors.storage_limit && (
+                            <div  style={{ color: 'red', fontSize: '12px' }}>{errors.storage_limit}</div>
+                          )}
+                          <Field
+                            size="small"
+                            sx={{ mb: 3 }}
+                            name="details"
+                            as={TextField}
+                            label="Details"
+  
+                            multiline
+                            rows={4}
+                            type="text"
+                            fullWidth
+                          />
 
-                          multiline
-                          rows={4}
-                          type="text"
-                          fullWidth
-                        />
+                        </div>
+                        
 
                       </Grid>
                     </Grid>
