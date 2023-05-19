@@ -59,10 +59,10 @@ const Page = (props) => {
 
   const initialValues = {
     name: "",
-    User_limit: "",
-    Price: "",
+    user_limit: "",
+    price: "",
     features: "",
-    Duration: "",
+    duration: "",
     storage_limit: "",
     details: "",
   };
@@ -82,10 +82,10 @@ const Page = (props) => {
   const validationSchema = Yup.object().shape({
     
       name: Yup.string().required("Name is required!"),
-      User_limit: Yup.string().required("User limit is required!"),
-      Price: Yup.string().required("Price is required!"),
+      user_limit: Yup.string().required("User limit is required!"),
+      price: Yup.string().required("Price is required!"),
       features: Yup.string().required("features is required!"),
-      Duration: Yup.string().required("Duration is required!"),
+      duration: Yup.string().required("Duration is required!"),
       storage_limit: Yup.string().required("Storage limit is required!"),
       details: Yup.string().required("Details is required!"),
   });
@@ -103,10 +103,10 @@ const Page = (props) => {
     fetchData();
   }, []);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values,dummySubscriptionData) => {
     // setLoading(true);
     console.log(values);
-    storeSubscription(values);
+    storeSubscription(dummySubscriptionData);
 
   };
   return (
@@ -165,13 +165,13 @@ const Page = (props) => {
                         </div>
 
                         <div>
-                        {touched.User_limit && errors.User_limit && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.User_limit}</div>
+                        {touched.user_limit && errors.user_limit && (
+                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.user_limit}</div>
                           )}
                         <Field
                           size="small"
                           sx={{ mb: 3 }}
-                          name="User_limit"
+                          name="user_limit"
                           as={TextField}
                           label="User limit"
                           type="number"
@@ -180,13 +180,13 @@ const Page = (props) => {
                         </div>
 
                         <div>
-                        {touched.Price && errors.Price && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.Price}</div>
+                        {touched.price && errors.price && (
+                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.price}</div>
                           )}
                         <Field
                           size="small"
                           sx={{ mb: 3 }}
-                          name="Price"
+                          name="price"
                           as={TextField}
                           label="Price"
                           type="number"
@@ -240,15 +240,15 @@ const Page = (props) => {
                       <Grid item xs={6}>
 
                       <div>
-                        {touched.Duration && errors.Duration && (
-                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.Duration}</div>
+                        {touched.duration && errors.duration && (
+                            <div style={{ color: 'red', fontSize: '12px' }}>{errors.duration}</div>
                           )}
                         <Field
                           size="small"
                           sx={{ mb: 3 }}
-                          name="Duration"
+                          name="duration"
                           as={TextField}
-                          type="date"
+                          type="text"
                           fullWidth
                         />
                         </div>
