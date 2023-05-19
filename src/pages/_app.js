@@ -15,6 +15,7 @@ const clientSideEmotionCache = createEmotionCache();
 
 const SplashScreen = () => null;
 import Store from 'src/stateManagement/Store';
+import ContextSet from './contex-set';
 
 const App = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
@@ -39,6 +40,7 @@ const App = (props) => {
       </Head>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AuthProvider>
+          <ContextSet/>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <AuthConsumer>

@@ -2,6 +2,7 @@ import {apiDelete, apiGet, apiPost, apiPut} from './axiosSetup';
 import {
   LOGIN_URL,
   SIGNUP_URL,
+  SUBSCRIOTION_STORE_URL
 } from '../constantData/url';
 
 export const PAGE_SIZE = 10;
@@ -38,6 +39,25 @@ export function loginApiCall(payload) {
 export function signupApiCall(payload) {
   return apiPost(
     SIGNUP_URL,
+    payload,
+    {
+      timeout: 5000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+    false,
+  );
+}
+
+
+
+
+
+export function subscriptionCreateApiCall(payload) {
+  console.log('subscriptionCreateApiCall', payload)
+  return apiPost(
+    SUBSCRIOTION_STORE_URL,
     payload,
     {
       timeout: 5000,

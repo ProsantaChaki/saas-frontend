@@ -1,3 +1,4 @@
+export const ADD_SUBSCRIPTION = 'Add Subscription';
 export const LOGIN_UPPER = 'LOG IN';
 export const LOGIN_LOWER = 'Log In';
 export const EMAIL = 'Email';

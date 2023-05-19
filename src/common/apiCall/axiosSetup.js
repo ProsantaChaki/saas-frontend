@@ -68,22 +68,18 @@ function handleFetchErrors(response) {
   return response;
 }
 
-function headerConfiguration(url, config) {
+async function headerConfiguration(url, config, token=null)  {
   if (url !== LOGIN_URL && url !== SIGNUP_URL ) {
     //TODO: set access token
-   /* getUserAccessToken()
-      .then(data => {
-        let authToken = `Bearer ${data}`;
+      token = token ? token : await localStorage.getItem("token")
+
+        let authToken = `Bearer ${token}`;
         if (!axios.defaults.headers.common.Authorization) {
           axios.defaults.headers.common.Authorization = authToken;
 
           config.headers.Authorization = authToken;
         }
-        //config.headers.common.Authorization = authToken;
-      })
-      .catch(e => {
-        console.log('catch.....', config);
-      });*/
+
   }
   return new Promise(resolve => {
     resolve(config);
@@ -175,7 +171,7 @@ async function apiGet(
 ) {
   const axiosToUse = useMock ? axiosInstance : axios;
   const fullUrl = useMock || external ? apiPath : API_BASE_URL + apiPath;
-  const newConfig = await headerConfiguration(apiPath, config);
+  const newConfig = await headerConfiguration(apiPath, config ,'');
   // console.log('newConfig......', newConfig);
   axiosRetry(axiosToUse, {retries: 3});
   return await axiosToUse
@@ -191,8 +187,7 @@ async function apiPost(
   useMock = false,
   withCredentials = false,
 ) {
-  const newConfig = await headerConfiguration(apiPath, config);
-
+  const newConfig = await headerConfiguration(apiPath, config, data?.token ?? '');
   const transformedData = transformConfig(newConfig, data);
   const axiosToUse = useMock ? axiosInstance : axios;
   const fullUrl = useMock ? apiPath : API_BASE_URL + apiPath;
@@ -203,7 +198,7 @@ async function apiPost(
 }
 
 async function fetchRequest(apiPath, payload, config) {
-  const temConfig = await headerConfiguration(apiPath, config);
+  const temConfig = await headerConfiguration(apiPath, config, '');
 
   const newConfig = {
     credentials: 'same-origin',
@@ -227,7 +222,7 @@ async function apiPut(
   useMock = false,
   withCredentials = true,
 ) {
-  const temConfig = await headerConfiguration(apiPath, config);
+  const temConfig = await headerConfiguration(apiPath, config, '');
 
   const newConfig = {
     headers: {
@@ -250,7 +245,7 @@ async function apiDelete(apiPath, config = {}, withCredentials = true) {
   /*if (withCredentials) {
     config.withCredentials = true;
   }*/
-  const newConfig = await headerConfiguration(apiPath, config);
+  const newConfig = await headerConfiguration(apiPath, config, '');
 
   const fullUrl = API_BASE_URL + apiPath;
   return await axios

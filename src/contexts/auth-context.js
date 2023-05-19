@@ -159,6 +159,8 @@ export const AuthProvider = (props) => {
 
     try {
       window.sessionStorage.setItem('authenticated', 'true');
+      window.sessionStorage.setItem('token', payload?.token ?? '');
+
     } catch (err) {
       console.error(err);
     }

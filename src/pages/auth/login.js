@@ -32,6 +32,7 @@ import { useAuth } from "src/hooks/use-auth";
 import getAuthState from "../../stateManagement/auth/AuthSelector";
 import { loginApiCall } from '../../common/apiCall/api';
 import { setUserProfileToReducer } from '../../stateManagement/auth/AuthActionCreators';
+import { setHeaders } from '../../common/apiCall/axiosSetup';
 
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
@@ -122,9 +123,13 @@ const Page = (props) => {
                     onSubmit={(values, { setSubmitting }) => {
 
                       loginApiCall(values).then(response => {
-                        console.log(response)
                         props.setUserProfileToReducerProp(response?.data);
                         props.setIsAuthenticatedProp({status: true});
+                        if ( response?.data?.token){
+                          localStorage.setItem("token", response?.data?.token);
+                        }
+
+                        setHeaders(response?.data?.token)
                         auth.signIn(response?.data)
                             .then(r => {
                               router.push('/')

@@ -1,21 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
-import Link from "next/link";
 import Head from "next/head";
-import { subDays, subHours } from "date-fns";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
-import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import { Box, Button, Container, Stack, Grid, Typography ,TextField,Autocomplete,Card} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersTable } from "src/sections/customer/customers-table";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { applyPagination } from "src/utils/apply-pagination";
+import getGlobalState from '../../stateManagement/global/globalSelector';
+import { setUserProfileToReducer } from '../../stateManagement/auth/AuthActionCreators';
+import { connect } from 'react-redux';
+import getAuthState from '../../stateManagement/auth/AuthSelector';
+import { subscriptionCreateApiCall } from '../../common/apiCall/api';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -25,7 +21,32 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Page = () => {
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: getGlobalState(state)?.isAuthenticated,
+  userProfile: getAuthState(state)?.userProfile,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setUserProfileToReducerProp: (data) => dispatch(setUserProfileToReducer(data)),
+});
+
+
+const Page = (props) => {
+
+  console.log('add subscription', props.userProfile)
+
+  const  dummySubscriptionData = {
+    "name" : "dummySubscriptionData",
+    "duration": "30",
+    "user_limit": "1",
+    "storage_limit": "500",
+    "price" :"0",
+    "status":"1",
+    "details": "Access anytime and anywhere Manage personal health records Upload documents and images Search Doctors"
+  }
+
+
 
   const initialValues = {
     firstName: "",
@@ -46,7 +67,18 @@ const Page = () => {
     account_name: "",
     routing_number: "",
   };
-  
+
+  const storeSubscription=(data)=>{
+    subscriptionCreateApiCall({...data, token: props.userProfile?.token})
+      .then((res)=>{
+      console.log(res)
+      }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  storeSubscription(dummySubscriptionData)
+
   // form field validation schema
   const validationSchema = Yup.object().shape({
     password: Yup.string()
@@ -56,7 +88,7 @@ const Page = () => {
     .email("Invalid Email address")
       .email("Invalid Email address")
       .required("Email is required!"),
-  
+
       firstName: Yup.string().required("FirstName is required!"),
       lastName: Yup.string().required("LastName is required!"),
       userName: Yup.string().required("Uer Name is required!"),
@@ -78,14 +110,14 @@ const Page = () => {
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    
+
   };
   return (
     <>
       <Head>
         <title>Add Subscription</title>
       </Head>
-      
+
       <Box
         component="main"
         sx={{
@@ -103,7 +135,7 @@ const Page = () => {
           </Stack>
           <Card sx={{marginTop:"3rem"}}>
           <Box sx={{ flexGrow: 1 ,width:"80%",margin:"0 auto",marginTop:"2rem"}}>
-          
+
             <Grid container spacing={2}>
               <Grid item xs={12}>
               <Formik
@@ -112,7 +144,7 @@ const Page = () => {
                 validationSchema={validationSchema}
               >
                 {({ values, errors, touched, setFieldValue }) => (
-                  <Form enctype="multipart/form-data">
+                  <Form encType="multipart/form-data">
                     <Grid
                       container
                       rowSpacing={1}
@@ -132,9 +164,9 @@ const Page = () => {
                             type="text"
                             fullWidth
                           />
-                          
+
                         </div>
-                       
+
                         <div>
                         {touched.User_limit && errors.User_limit && (
                             <div style={{ color: 'red', fontSize: '12px' }}>{errors.User_limit}</div>
@@ -149,7 +181,7 @@ const Page = () => {
                           fullWidth
                         />
                         </div>
-                        
+
                         <div>
                         {touched.Price && errors.Price && (
                             <div style={{ color: 'red', fontSize: '12px' }}>{errors.Price}</div>
@@ -164,7 +196,7 @@ const Page = () => {
                           fullWidth
                         />
                         </div>
-                        
+
 
                           <Field name="zone_divisions_id">
                           {({ field, form }) => (
@@ -212,10 +244,10 @@ const Page = () => {
                         </Field>
 
                         {/* {error && <div>{error}</div>} */}
-                        
+
                       </Grid>
                       <Grid item xs={6}>
-                      
+
                       <div>
                         {touched.Duration && errors.Duration && (
                             <div style={{ color: 'red', fontSize: '12px' }}>{errors.Duration}</div>
@@ -243,7 +275,7 @@ const Page = () => {
                             type="text"
                             fullWidth
                           />
-                          
+
                         </div>
                         <Field
                           size="small"
@@ -251,13 +283,13 @@ const Page = () => {
                           name="details"
                           as={TextField}
                           label="Details"
-                          
+
                           multiline
                           rows={4}
                           type="text"
                           fullWidth
                         />
-                        
+
                       </Grid>
                     </Grid>
                     <div style={{width:"50%",margin:"0 auto"}}>
@@ -270,30 +302,31 @@ const Page = () => {
                       sx={{
                         background: "#00467a",
                         color: "white",
-                        mb: 2, mt: 5 
+                        mb: 2, mt: 5
                       }}
                     >
                       Submit
                     </LoadingButton>
-                   
+
                     </div>
-                   
+
                   </Form>
                 )}
               </Formik>
               </Grid>
-              
+
             </Grid>
-            
+
           </Box>
           </Card>
         </Container>
       </Box>
-    
+
     </>
   );
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default Page;
+// export default Page;
+export default connect(mapStateToProps, mapDispatchToProps)(Page);
