@@ -68,6 +68,7 @@ const Page = (props) => {
   };
 
   const storeSubscription=(data)=>{
+    console.log('storeSubscription', data)
     subscriptionCreateApiCall({...data, token: props.userProfile?.token})
       .then((res)=>{
       console.log(res)
@@ -80,7 +81,7 @@ const Page = (props) => {
 
   // form field validation schema
   const validationSchema = Yup.object().shape({
-    
+
       name: Yup.string().required("Name is required!"),
       user_limit: Yup.string().required("User limit is required!"),
       price: Yup.string().required("Price is required!"),
@@ -103,10 +104,10 @@ const Page = (props) => {
     fetchData();
   }, []);
 
-  const handleSubmit = async (values,dummySubscriptionData) => {
+  const handleSubmit = async (values) => {
     // setLoading(true);
     console.log(values);
-    storeSubscription(dummySubscriptionData);
+    storeSubscription(values);
 
   };
   return (
@@ -195,7 +196,7 @@ const Page = (props) => {
                         </div>
 
 
-                          
+
                           <Field name="features">
                               {({ field, form }) => (
                                 <Autocomplete
@@ -278,7 +279,7 @@ const Page = (props) => {
                             name="details"
                             as={TextField}
                             label="Details"
-  
+
                             multiline
                             rows={4}
                             type="text"
@@ -286,7 +287,7 @@ const Page = (props) => {
                           />
 
                         </div>
-                        
+
 
                       </Grid>
                     </Grid>
