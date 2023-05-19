@@ -1,29 +1,37 @@
-import { useCallback, useState } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useCallback, useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { useRouter } from "next/navigation";
+import Divider from "@mui/material/Divider";
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import Image from "next/image";
+import GoogleIcon from "@mui/icons-material/Google";
+import Stack from "@mui/material/Stack";
+import getGlobalState from "../../stateManagement/global/globalSelector";
 import {
-  Alert,
+  testDataUpdate,
+  setIsAuthenticated,
+} from "../../stateManagement/global/GlobalActionCreators";
+import { connect } from "react-redux";
+import {
+  Grid,
+  Card,
   Box,
   Button,
-  FormHelperText,
   Link,
-  Stack,
-  Tab,
-  Tabs,
   TextField,
-  Typography
-} from '@mui/material';
-import { useAuth } from 'src/hooks/use-auth';
-import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import getGlobalState from '../../stateManagement/global/globalSelector';
-import getAuthState from '../../stateManagement/auth/AuthSelector';
-import { authLoginApiCall } from '../../stateManagement/auth/AuthActionCreators';
-import { connect } from 'react-redux';
-import { testDataUpdate } from '../../stateManagement/global/GlobalActionCreators';
-
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { useAuth } from "src/hooks/use-auth";
+import getAuthState from "../../stateManagement/auth/AuthSelector";
+import { loginApiCall } from '../../common/apiCall/api';
+import { setUserProfileToReducer } from '../../stateManagement/auth/AuthActionCreators';
 
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
@@ -32,217 +40,247 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   testDataUpdateProp: (data) => dispatch(testDataUpdate(data)),
+  setUserProfileToReducerProp: (data) => dispatch(setUserProfileToReducer(data)),
+  setIsAuthenticatedProp: (data) => dispatch(setIsAuthenticated(data)),
 });
 
-
 const Page = (props) => {
-
-  console.log('................', props.testData, props.isAuthenticated)
-
-
+  console.log("................", props.testData, props.isAuthenticated);
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('email');
-  const formik = useFormik({
-    initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123!',
-      submit: null
-    },
-    validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required('Password is required')
-    }),
-    onSubmit: async (values, helpers) => {
-      props.testDataUpdateProp('Global data update')
-      try {
-        await auth.signIn(values.email, values.password);
-        router.push('/');
-      } catch (err) {
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
-        helpers.setSubmitting(false);
-      }
-    }
+  const [method, setMethod] = useState("email");
+
+  const validationSchema = Yup.object().shape({
+    // email: Yup.string().email("Invalid email address").required("Required"),
+    // password: Yup.string().required("Required"),
   });
 
-  const handleMethodChange = useCallback(
-    (event, value) => {
-      setMethod(value);
-    },
-    []
-  );
+  const handleMethodChange = useCallback((event, value) => {
+    setMethod(value);
+  }, []);
 
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
-  );
+  const handleSkip = useCallback(() => {
+    auth.skip();
+    router.push("/");
+  }, [auth, router]);
 
   return (
     <>
-      <Head>
-        <title>
-          Login | Micro Health +
-        </title>
-      </Head>
-      <Box
-        sx={{
-          backgroundColor: 'background.paper',
-          flex: '1 1 auto',
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center'
-        }}
+      <div
+        className="loginPaseLogo"
+        style={{ textAlign: "center", marginTop: "4rem", marginBottom: "3rem" }}
       >
+        <div>
+          <Image src="/assets/logos/logo.jpeg" alt="logo" width={250} height={150} />
+        </div>
+      </div>
+
+      <div className="loginPageCardSection">
         <Box
           sx={{
-            maxWidth: 550,
-            px: 3,
-            py: '100px',
-            width: '100%'
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            "& > *": {
+              m: 1,
+            },
           }}
         >
-          <div>
-            <Stack
-              spacing={1}
-              sx={{ mb: 3 }}
-            >
-              <Typography variant="h4">
-                Login
-              </Typography>
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                Don&apos;t have an account?
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/register"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Register
-                </Link>
-              </Typography>
-            </Stack>
-            <Tabs
-              onChange={handleMethodChange}
-              sx={{ mb: 3 }}
-              value={method}
-            >
-              <Tab
-                label="Email"
-                value="email"
-              />
-              <Tab
-                label="Phone Number"
-                value="phoneNumber"
-              />
-            </Tabs>
-            {method === 'email' && (
-              <form
-                noValidate
-                onSubmit={formik.handleSubmit}
-              >
-                <Stack spacing={3}>
-                  <TextField
-                    error={!!(formik.touched.email && formik.errors.email)}
-                    fullWidth
-                    helperText={formik.touched.email && formik.errors.email}
-                    label="Email Address"
-                    name="email"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    type="email"
-                    value={formik.values.email}
-                  />
-                  <TextField
-                    error={!!(formik.touched.password && formik.errors.password)}
-                    fullWidth
-                    helperText={formik.touched.password && formik.errors.password}
-                    label="Password"
-                    name="password"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    type="password"
-                    value={formik.values.password}
-                  />
-                </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText>
-                {formik.errors.submit && (
+          <Grid container columns={12} spacing={1} sx={{ width: "75%" }} className="temImage">
+            <Grid item xs={12} md={6} sm={12} sx={{ marginRight: "15px" }}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
                   <Typography
-                    color="error"
-                    sx={{ mt: 3 }}
-                    variant="body2"
+                    variant="h5"
+                    component="div"
+                    sx={{ textAlign: "center", fontWeight: "bold", letterSpacing: ".01em" }}
                   >
-                    {formik.errors.submit}
+                    Log in to Saas
                   </Typography>
-                )}
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  type="submit"
-                  variant="contained"
-                >
-                  Continue
-                </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button>
-                <Alert
-                  color="primary"
-                  severity="info"
-                  sx={{ mt: 3 }}
-                >
+                  <Typography
+                    sx={{ fontSize: 16, textAlign: "center", padding: "5px" }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Don't have an account?
+                    <a href="#" style={{ textDecoration: "none", color: "#3498db" }}>
+                      Start a free trial
+                    </a>
+                  </Typography>
+
+                  <Formik
+                    initialValues={{ email: "", password: "" }}
+                    validate={(values) => {
+                      const errors = {};
+                      if (!values.email) {
+                        errors.email = "Required";
+                      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+                        errors.email = "Invalid email address";
+                      }
+                      return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+
+                      loginApiCall(values).then(response => {
+                        console.log(response)
+                        props.setUserProfileToReducerProp(response?.data);
+                        props.setIsAuthenticatedProp({status: true});
+                        auth.signIn(response?.data)
+                            .then(r => {
+                              router.push('/')
+                            }).catch((err)=>{
+                              console.log(err)
+                            })
+
+                      }).catch((err) => {
+                        console.log(err)
+
+                      })
+
+                    }}
+                  >
+                    {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                      /* and other goodies */
+                    }) => (
+                      <form onSubmit={handleSubmit}>
+                        <div style={{ marginTop: "1rem" }}>
+                          <label>Email address or username</label>
+                          <input
+                            type="email"
+                            name="email"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.email}
+                            style={{
+                              width: "100%",
+                              fontSize: "18px",
+                              padding: "10px",
+                              border: ".5px solid #9C9B9B",
+                              marginBottom: "1rem",
+                            }}
+                          />
+                          {errors.email && touched.email && errors.email}
+                          <label>Email address or password</label>
+                          <input
+                            type="password"
+                            name="password"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.password}
+                            style={{
+                              width: "100%",
+                              fontSize: "18px",
+                              padding: "10px",
+                              border: ".5px solid #9C9B9B",
+                            }}
+                          />
+                          {errors.password && touched.password && errors.password}
+                        </div>
+                        <div>
+                          <FormGroup>
+                            <FormControlLabel control={<Checkbox />} label="Keep me logged in" />
+                          </FormGroup>
+                        </div>
+                        <div style={{ textAlign: "right", marginTop: "-2rem" }}>
+                          <Link href="" sx={{ textDecoration: "none" }}>
+                            Forgot password?
+                          </Link>
+                        </div>
+
+                        <div>
+                          <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                              background: "#0fb860",
+                              borderRadius: "4px",
+                              marginTop: "2rem",
+                              fontWeight: "bold",
+                              fontSize: "18px",
+                            }}
+                          >
+                            Log in
+                          </Button>
+                        </div>
+                        <Divider component="li" sx={{ marginTop: "10px" }}>
+                          or
+                        </Divider>
+                      </form>
+                    )}
+                  </Formik>
+                  <Stack direction="row" spacing={2} sx={{ marginTop: "1rem" }}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<GoogleIcon />}
+                      fullWidth
+                      sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
+                    >
+                      Log in with Google
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      sx={{ color: "#121212", border: "1px solid #a3a7a8" }}
+                    >
+                      Log in with SAML
+                    </Button>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={5} sm={12}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
                   <div>
-                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
+                    <Typography
+                      variant="h6"
+                      component="div"
+                      sx={{ letterSpacing: ".01em", marginTop: "-1.5rem" }}
+                    >
+                      What's New
+                    </Typography>
                   </div>
-                </Alert>
-              </form>
-            )}
-            {method === 'phoneNumber' && (
-              <div>
-                <Typography
-                  sx={{ mb: 1 }}
-                  variant="h6"
-                >
-                  Not available in the demo
-                </Typography>
-                <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
-                </Typography>
-              </div>
-            )}
-          </div>
+                  <div>
+                    <CardMedia
+                      sx={{ height: 240, marginTop: "10px" }}
+                      image="/assets/aaa.jpeg"
+                      title="green iguana"
+                    />
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                        sx={{ margin: "-13px 0 8px 0" }}
+                      >
+                        Detect and Address Maintenance Trends quickly with these Widgets
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Lizards are a widespread group of squamate reptiles, with over 6,000
+                        species, ranging across all continents except Antarctica
+                      </Typography>
+                    </CardContent>
+
+                    <Divider />
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
         </Box>
-      </Box>
+      </div>
     </>
   );
 };
-
-Page.getLayout = (page) => (
-  <AuthLayout>
-    {page}
-  </AuthLayout>
-);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);

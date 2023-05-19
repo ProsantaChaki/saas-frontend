@@ -1,7 +1,5 @@
 export const LOGIN_UPPER = 'LOG IN';
 export const LOGIN_LOWER = 'Log In';
-export const EMAIL = 'Email';
-export const INVALID_EMAIL = "Invalid email address";
 export const SIGNUP_UPPER = 'SIGN UP';
 export const SIGNUP_LOWER = 'Sign Up';
 export const ID = 'ID';

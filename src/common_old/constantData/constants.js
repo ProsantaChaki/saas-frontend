@@ -1,6 +1,6 @@
 
-export const API_BASE_URL = 'http://cattleglobal.com/api/';
-export const IMAGE_BASE_URL = 'http://cattleglobal.com/images/users/';
+export const API_BASE_URL = 'https://reqres.in/api/';
+export const IMAGE_BASE_URL = 'https://reqres.in/images/users/';
 
 
 export const WEB_SOCKET_BASE_URL = '';
