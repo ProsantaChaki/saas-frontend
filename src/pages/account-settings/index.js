@@ -67,9 +67,9 @@ const AccountSettings = () => {
         }}
       >
         <Container maxWidth="lg">
-            <Typography variant="h4">
+            {/* <Typography variant="h4">
               Settings
-            </Typography>
+            </Typography> */}
 
             <Card>
               <TabContext value={value}>
@@ -87,7 +87,7 @@ const AccountSettings = () => {
                       </Box>
                     }
                   />
-                  <Tab
+                  {/* <Tab
                     value='security'
                     label={
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -104,7 +104,7 @@ const AccountSettings = () => {
                         <TabName>Info</TabName>
                       </Box>
                     }
-                  />
+                  /> */}
                 </TabList>
 
                 <TabPanel sx={{ p: 0 }} value='account'>

@@ -1,27 +1,15 @@
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
-import BellIcon from '@heroicons/react/24/solid/BellIcon';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
-import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
-import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
-import ArrowTopRightOnSquareIcon from '@heroicons/react/24/solid/ArrowTopRightOnSquareIcon';
-import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
 import {
   Box,
   Avatar,
-  IconButton,
-  SvgIcon,
-  Tooltip,
   useMediaQuery,
   Divider,
   Drawer,
   Stack,
   Typography,
-  Badge
 } from '@mui/material';
-import { alpha } from '@mui/material/styles';
-import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
@@ -61,8 +49,8 @@ export const SideNav = (props) => {
       >
         <Box sx={{paddingBottom:3}}>
           <Box
-            component={NextLink}
-            href="/"
+            // component={NextLink}
+            // href="/"
             sx={{
               display: 'inline-flex',
               height: 32,

@@ -82,15 +82,15 @@ export const items = [
       </SvgIcon>
     )
   },
-  {
-    title: 'Account Settings',
-    path: '/account-settings',
-    icon: (
-      <SvgIcon fontSize="small">
-        <CogIcon />
-      </SvgIcon>
-    )
-  },
+  // {
+  //   title: 'Account Settings',
+  //   path: '/account-settings',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <CogIcon />
+  //     </SvgIcon>
+  //   )
+  // },
   {
     title: 'Login',
     path: '/auth/login',
