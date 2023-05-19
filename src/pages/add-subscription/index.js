@@ -61,7 +61,8 @@ const Page = (props) => {
     name: "",
     user_limit: "",
     price: "",
-    features: "",
+    status:"1",
+    // features: "",
     duration: "",
     storage_limit: "",
     details: "",
@@ -103,10 +104,10 @@ const Page = (props) => {
     fetchData();
   }, []);
 
-  const handleSubmit = async (values,dummySubscriptionData) => {
+  const handleSubmit = async (values,) => {
     // setLoading(true);
     console.log(values);
-    storeSubscription(dummySubscriptionData);
+    storeSubscription(values);
 
   };
   return (
@@ -196,7 +197,7 @@ const Page = (props) => {
 
 
                           
-                          <Field name="features">
+                          {/* <Field name="features">
                               {({ field, form }) => (
                                 <Autocomplete
                                   {...field}
@@ -232,7 +233,7 @@ const Page = (props) => {
                                   )}
                                 />
                               )}
-                            </Field>
+                            </Field> */}
 
                         {/* {error && <div>{error}</div>} */}
 
