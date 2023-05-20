@@ -1,3 +1,5 @@
+import * as Yup from 'yup';
+
 export const ADD_SUBSCRIPTION = 'Add Subscription';
 export const LOGIN_UPPER = 'LOG IN';
 export const LOGIN_LOWER = 'Log In';
@@ -46,3 +48,23 @@ export const INVITE_YOUR_FRIENDS = 'Invite your friends';
 export const DISCLAIMER = 'Disclaimer';
 export const SUBJECT_TO_CHANGE = 'Subject to change';
 export const PRIVACY_POLICY = 'Privacy Policy';
+export const SUBMIT = 'Submit';
+export const SUBSCRIPTION={
+  TITLE: 'Plan Title',
+  USER_LIMIT: 'User limit',
+  PRICE: 'Price',
+  VALIDITY_IN_DAYS: 'Validity in days',
+  STORAGE_LIMIT: 'Storage limit',
+  DETAILS: 'Details',
+  ADD_NEW_SUBSCRIPTION_PLAN: 'New Subscription Plan',
+  ADD_SUBSCRIPTION: 'Add Subscription',
+  ADD_SUCCESS_MESSAGE: 'Subscription plan add successfully',
+  REQUIRED:{
+    TITLE: "Title is required!",
+    USER_LIMIT: "User limit is required!",
+    PRICE: "Price is required!",
+    DURATION: "Duration is required!",
+    STORAGE: "Storage limit is required!",
+    DETAILS:"Details is required!",
+  }
+}

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Button, Container, Stack, Grid, Typography ,TextField,Autocomplete,Card} from "@mui/material";
+import { Box,  Container, Stack, Grid, Typography ,TextField,Card} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
@@ -14,6 +14,8 @@ import getAuthState from '../../stateManagement/auth/AuthSelector';
 import { subscriptionCreateApiCall } from '../../common/apiCall/api';
 import Alert from "../../components/Alert";
 import { useRouter } from 'next/router';
+import { SUBMIT, SUBSCRIPTION } from '../../common/constantData/language';
+import { ADMIN } from '../../common/constantData/screenUrl';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -37,17 +39,8 @@ const mapDispatchToProps = (dispatch) => ({
 const Page = (props) => {
 
   const router = useRouter();
-  console.log('add subscription', props.userProfile)
 
-  const  dummySubscriptionData = {
-    "name" : "dummySubscriptionData",
-    "duration": "30",
-    "user_limit": "1",
-    "storage_limit": "500",
-    "price" :"0",
-    "status":"1",
-    "details": "Access anytime and anywhere Manage personal health records Upload documents and images Search Doctors"
-  }
+
   const featuresData = [
     {
       id: "1",
@@ -71,28 +64,26 @@ const Page = (props) => {
     details: "",
   };
 
-  const storeSubscription=(data)=>{
-    console.log('storeSubscription', data)
+  const handleSubmit=(data)=>{
     subscriptionCreateApiCall({...data, token: props.userProfile?.token})
       .then((res)=>{
-      console.log(res)
+        setResponseMessage(SUBSCRIPTION.ADD_SUCCESS_MESSAGE);
+        setOpenAlert(true);
+        router.push(ADMIN.SUBSCRIPTION_PLAN_LIST);
       }).catch((err)=>{
       console.log(err)
     })
   }
 
-  // storeSubscription(dummySubscriptionData)
-
-  // form field validation schema
   const validationSchema = Yup.object().shape({
 
-      name: Yup.string().required("Name is required!"),
-      user_limit: Yup.string().required("User limit is required!"),
-      price: Yup.string().required("Price is required!"),
+      name: Yup.string().required(SUBSCRIPTION.REQUIRED.TITLE),
+      user_limit: Yup.string().required(SUBSCRIPTION.REQUIRED.USER_LIMIT),
+      price: Yup.string().required(SUBSCRIPTION.REQUIRED.PRICE),
       //  features: Yup.string().required("features is required!"),
-      duration: Yup.string().required("Duration is required!"),
-      storage_limit: Yup.string().required("Storage limit is required!"),
-      details: Yup.string().required("Details is required!"),
+      duration: Yup.string().required(SUBSCRIPTION.REQUIRED.DURATION),
+      storage_limit: Yup.string().required(SUBSCRIPTION.REQUIRED.STORAGE),
+      details: Yup.string().required(SUBSCRIPTION.REQUIRED.DETAILS),
   });
 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -107,17 +98,6 @@ const Page = (props) => {
     fetchData();
   }, []);
 
-
-
-  const handleSubmit = async (values) => {
-
-    storeSubscription(values);
-    setResponseMessage("The request was successful");
-    setOpenAlert(true);
-    // Navigate to the "/coupon" page
-  router.push('/subscription');
-  };
-
   const handleAlertClose = () => {
     setResponseMessage("");
     setOpenAlert(false);
@@ -125,7 +105,7 @@ const Page = (props) => {
   return (
     <>
       <Head>
-        <title>Add Subscription</title>
+        <title>{SUBSCRIPTION.ADD_SUBSCRIPTION}</title>
       </Head>
 
       <Box
@@ -139,7 +119,7 @@ const Page = (props) => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Add New Subscription</Typography>
+                <Typography variant="h4">{SUBSCRIPTION.ADD_NEW_SUBSCRIPTION_PLAN}</Typography>
               </Stack>
             </Stack>
           </Stack>
@@ -170,7 +150,7 @@ const Page = (props) => {
                             sx={{ mb: 3 ,}}
                             name="name"
                             as={TextField}
-                            label="Name"
+                            label={SUBSCRIPTION.TITLE}
                             type="text"
                             fullWidth
                           />
@@ -186,7 +166,7 @@ const Page = (props) => {
                           sx={{ mb: 3 }}
                           name="user_limit"
                           as={TextField}
-                          label="User limit"
+                          label={SUBSCRIPTION.USER_LIMIT}
                           type="number"
                           fullWidth
                         />
@@ -201,7 +181,7 @@ const Page = (props) => {
                           sx={{ mb: 3 }}
                           name="price"
                           as={TextField}
-                          label="Price"
+                          label={SUBSCRIPTION.PRICE}
                           type="number"
                           fullWidth
                         />
@@ -261,8 +241,9 @@ const Page = (props) => {
                           size="small"
                           sx={{ mb: 3 }}
                           name="duration"
+                          label={SUBSCRIPTION.VALIDITY_IN_DAYS}
                           as={TextField}
-                          type="text"
+                          type="number"
                           fullWidth
                         />
                         </div>
@@ -276,7 +257,7 @@ const Page = (props) => {
                             sx={{ mb: 3 }}
                             name="storage_limit"
                             as={TextField}
-                            label="Storage limit"
+                            label={SUBSCRIPTION.STORAGE_LIMIT}
                             type="text"
                             fullWidth
                           />
@@ -291,8 +272,7 @@ const Page = (props) => {
                             sx={{ mb: 3 }}
                             name="details"
                             as={TextField}
-                            label="Details"
-
+                            label={SUBSCRIPTION.DETAILS}
                             multiline
                             rows={4}
                             type="text"
@@ -300,8 +280,6 @@ const Page = (props) => {
                           />
 
                         </div>
-
-
                       </Grid>
                     </Grid>
                     <div style={{width:"50%",margin:"0 auto"}}>
@@ -317,7 +295,7 @@ const Page = (props) => {
                         mb: 2, mt: 5
                       }}
                     >
-                      Submit
+                      {SUBMIT}
                     </LoadingButton>
                     <Alert open={openAlert} onClose={handleAlertClose} message={responseMessage} />
                     </div>
@@ -340,5 +318,4 @@ const Page = (props) => {
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-// export default Page;
 export default connect(mapStateToProps, mapDispatchToProps)(Page);
