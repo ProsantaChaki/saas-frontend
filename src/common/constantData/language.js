@@ -49,6 +49,32 @@ export const DISCLAIMER = 'Disclaimer';
 export const SUBJECT_TO_CHANGE = 'Subject to change';
 export const PRIVACY_POLICY = 'Privacy Policy';
 export const SUBMIT = 'Submit';
+export const FEATURE = {
+  TITLE: 'FEATURE',
+  Subscription:"Subscription",
+  USER_LIMIT: 'User limit',
+  Feature_Add_Button:"Add Feature"
+};
+export const FEATURE_TABLE= {
+  TITLE: 'Details',
+  MAME:"Name",
+  DETAILS: 'Details',
+  ACTION:"Action",
+  FEATURE_DETAILS_Button:"Details" 
+};
+export const FEATURE_DETAILS = {
+  TITLE: 'Details',
+  MAME:"Name",
+  DETAILS: 'Details',
+  FEATURE_DETAILS_Button:"Edit" 
+};
+export const ADD_FEATURE = {
+  TITLE: 'Add New Feature',
+  MAME:"Name",
+  DETAILS: 'Details',
+  FEATURE_DETAILS_Button:"Edit" ,
+  ADD_SUCCESS_MESSAGE: 'Feature add successfully',
+}
 export const SUBSCRIPTION={
   TITLE: 'Plan Title',
   USER_LIMIT: 'User limit',
@@ -67,4 +93,5 @@ export const SUBSCRIPTION={
     STORAGE: "Storage limit is required!",
     DETAILS:"Details is required!",
   }
-}
+};
+

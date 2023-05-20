@@ -3,7 +3,9 @@ import {
   LOGIN_URL,
   SIGNUP_URL,
   SUBSCRIOTION_STORE_URL,
-  USER_ME
+  USER_ME,
+  FEATURE_STORE_URL,
+  FEATURE_LIST_URL
 } from '../constantData/url';
 
 export const PAGE_SIZE = 10;
@@ -66,6 +68,34 @@ export function subscriptionCreateApiCall(payload) {
         'Content-Type': 'application/json',
       },
     },
+    false,
+  );
+}
+// export function featureCreateApiCall(payload) {
+//   console.log('featureCreateApiCall', payload)
+//   return apiPost(
+//     USER_ME,
+//     payload,
+//     {
+//       timeout: 5000,
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     },
+//     false,
+//   );
+// }
+
+
+export function fetchFeatureAPIGet() {
+  return apiGet(
+    FEATURE_LIST_URL,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+    false,
     false,
   );
 }
