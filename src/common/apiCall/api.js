@@ -2,7 +2,8 @@ import {apiDelete, apiGet, apiPost, apiPut} from './axiosSetup';
 import {
   LOGIN_URL,
   SIGNUP_URL,
-  SUBSCRIOTION_STORE_URL
+  SUBSCRIOTION_STORE_URL,
+  USER_ME
 } from '../constantData/url';
 
 export const PAGE_SIZE = 10;
@@ -68,6 +69,19 @@ export function subscriptionCreateApiCall(payload) {
     false,
   );
 }
+export function fetchUserProfileAPIGet() {
+  return apiGet(
+    USER_ME,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+    false,
+    false,
+  );
+}
+
 /*
 
 export function otpVerificationApiCall(payload) {

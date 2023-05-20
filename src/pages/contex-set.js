@@ -8,7 +8,12 @@ import {
 import { connect } from "react-redux";
 import { useAuth } from "src/hooks/use-auth";
 import getAuthState from "../stateManagement/auth/AuthSelector";
-import { authLoginApiCall } from '../stateManagement/auth/AuthActionCreators';
+import {
+  authLoginApiCall,
+  setUserProfileToReducer
+} from '../stateManagement/auth/AuthActionCreators';
+import { fetchUserProfileAPIGet } from '../common/apiCall/api';
+import { setHeaders } from '../common/apiCall/axiosSetup';
 
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
@@ -16,28 +21,45 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  testDataUpdateProp: (data) => dispatch(testDataUpdate(data)),
+  setUserProfileToReducerProp: (data) => dispatch(setUserProfileToReducer(data)),
   setIsAuthenticatedProp: (data) => dispatch(setIsAuthenticated(data)),
 });
+
 
 const ContextSet = (props) => {
   const router = useRouter();
   const auth = useAuth();
-  console.log(props,props.userProfile)
 
 
-  useEffect(()=>{
-    if (props.isAuthenticated) {
-      console.log(props.userProfile)
+  const featcUserProfile =()=>{
+    fetchUserProfileAPIGet()
+      .then((response)=>{
+        props.setUserProfileToReducerProp(response?.data);
+        props.setIsAuthenticatedProp({status: true});
+        auth.signIn(response?.data)
+            .then(r => {
+              router.push('/')
+            }).catch((err)=>{
+          console.log(err)
+        })
+    })
+      .catch((err=>{
+        auth.signOut()
+      }))
+  }
+
+
+  useEffect(  ()=>{
+    if (props.isAuthenticated && props?.userProfile?.name){
      auth.signIn( props.userProfile).then(()=>{
-        //router.push('/');
       }).catch((err)=>{
-        console.log(err)
+       featcUserProfile();
       })
     }else{
-      //auth.signOut()
+      featcUserProfile();
     }
-  },[props])
+  },[props.isAuthenticated, props.userProfile])
+
 
   return <></>
 };

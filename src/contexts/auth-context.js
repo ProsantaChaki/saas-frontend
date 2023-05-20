@@ -152,15 +152,11 @@ export const AuthProvider = (props) => {
   // };
 
   const signIn = async (payload) => {
-    console.log(payload)
-    if (payload?.email !== 'demo@devias.io' || payload?.password !== 'Password123!') {
-      //throw new Error('Please check your email and password');
-    }
-
     try {
       window.sessionStorage.setItem('authenticated', 'true');
-      window.sessionStorage.setItem('token', payload?.token ?? '');
-
+      if (payload?.token){
+        window.sessionStorage.setItem('token', payload?.token ?? '');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -168,8 +164,8 @@ export const AuthProvider = (props) => {
     const user = {
       id: payload?.id ?? '5e86809283e28b96d2d38537',
       avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: payload?.name ?? 'Prosanta Chaki',
-      email: payload?.email ?? 'anika.visser@devias.io'
+      name: payload?.name ?? 'User',
+      email: payload?.email ?? 'user@gmail.com'
     };
 
     dispatch({
