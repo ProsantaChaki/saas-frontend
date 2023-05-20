@@ -12,6 +12,8 @@ import { setUserProfileToReducer } from '../../stateManagement/auth/AuthActionCr
 import { connect } from 'react-redux';
 import getAuthState from '../../stateManagement/auth/AuthSelector';
 import { subscriptionCreateApiCall } from '../../common/apiCall/api';
+import Alert from "../../components/Alert";
+import { useRouter } from 'next/router';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -34,6 +36,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const Page = (props) => {
 
+  const router = useRouter();
   console.log('add subscription', props.userProfile)
 
   const  dummySubscriptionData = {
@@ -61,7 +64,8 @@ const Page = (props) => {
     name: "",
     user_limit: "",
     price: "",
-    features: "",
+    status:"1",
+    // features: "",
     duration: "",
     storage_limit: "",
     details: "",
@@ -85,7 +89,7 @@ const Page = (props) => {
       name: Yup.string().required("Name is required!"),
       user_limit: Yup.string().required("User limit is required!"),
       price: Yup.string().required("Price is required!"),
-      features: Yup.string().required("features is required!"),
+      //  features: Yup.string().required("features is required!"),
       duration: Yup.string().required("Duration is required!"),
       storage_limit: Yup.string().required("Storage limit is required!"),
       details: Yup.string().required("Details is required!"),
@@ -93,9 +97,8 @@ const Page = (props) => {
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [options, setOptions] = useState([]);
-  // const [selectedOption2, setSelectedOption2] = useState(null);
-  // const [options2, setOptions2] = useState([]);
-  // const [options5, setOptions5] = useState([]);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,11 +107,20 @@ const Page = (props) => {
     fetchData();
   }, []);
 
-  const handleSubmit = async (values) => {
-    // setLoading(true);
-    console.log(values);
-    storeSubscription(values);
 
+
+  const handleSubmit = async (values) => {
+
+    storeSubscription(values);
+    setResponseMessage("The request was successful");
+    setOpenAlert(true);
+    // Navigate to the "/coupon" page
+  router.push('/subscription');
+  };
+
+  const handleAlertClose = () => {
+    setResponseMessage("");
+    setOpenAlert(false);
   };
   return (
     <>
@@ -197,7 +209,8 @@ const Page = (props) => {
 
 
 
-                          <Field name="features">
+
+                          {/* <Field name="features">
                               {({ field, form }) => (
                                 <Autocomplete
                                   {...field}
@@ -233,7 +246,7 @@ const Page = (props) => {
                                   )}
                                 />
                               )}
-                            </Field>
+                            </Field>  */}
 
                         {/* {error && <div>{error}</div>} */}
 
@@ -306,7 +319,7 @@ const Page = (props) => {
                     >
                       Submit
                     </LoadingButton>
-
+                    <Alert open={openAlert} onClose={handleAlertClose} message={responseMessage} />
                     </div>
 
                   </Form>
