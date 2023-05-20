@@ -14,6 +14,7 @@ import {
 } from '../stateManagement/auth/AuthActionCreators';
 import { fetchUserProfileAPIGet } from '../common/apiCall/api';
 import { setHeaders } from '../common/apiCall/axiosSetup';
+import { DASHBOARD_SCREEN_URL, LOGIN_SCREEN_URL } from '../common/constantData/screenUrl';
 
 const mapStateToProps = (state) => ({
   isAuthenticated: getGlobalState(state)?.isAuthenticated,
@@ -38,13 +39,15 @@ const ContextSet = (props) => {
         props.setIsAuthenticatedProp({status: true});
         auth.signIn(response?.data)
             .then(r => {
-              router.push('/')
+              router.push(DASHBOARD_SCREEN_URL)
             }).catch((err)=>{
           console.log(err)
         })
     })
       .catch((err=>{
         auth.signOut()
+        router.push(LOGIN_SCREEN_URL)
+
       }))
   }
 
@@ -58,7 +61,7 @@ const ContextSet = (props) => {
     }else{
       featcUserProfile();
     }
-  },[props.isAuthenticated, props.userProfile])
+  },[])
 
 
   return <></>
