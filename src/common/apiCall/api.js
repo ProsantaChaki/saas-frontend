@@ -5,7 +5,8 @@ import {
   SUBSCRIOTION_STORE_URL,
   USER_ME,
   FEATURE_STORE_URL,
-  FEATURE_LIST_URL
+  FEATURE_LIST_URL,
+  FEATURE_DETAILS_URL
 } from '../constantData/url';
 
 export const PAGE_SIZE = 10;
@@ -90,6 +91,19 @@ export function subscriptionCreateApiCall(payload) {
 export function fetchFeatureAPIGet() {
   return apiGet(
     FEATURE_LIST_URL,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+    false,
+    false,
+  );
+}
+
+export function fetchFeatureDetailsAPIGet(id) {
+  return apiGet(
+    `v1/auth/feature/${id}`,
     {
       headers: {
         'Content-Type': 'application/json',

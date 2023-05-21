@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState,useEffect } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
@@ -8,62 +8,38 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { FeatureTable } from "src/sections/customer/feature-table";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { applyPagination } from "src/utils/apply-pagination";
- import { ADD_SUBSCRIPTION } from '../../common/constantData/language';
+import { ADD_SUBSCRIPTION } from '../../common/constantData/language';
 import { FEATURE } from '../../common/constantData/language';
 import { fetchFeatureAPIGet } from '../../common/apiCall/api';
 
 const now = new Date();
 
-const data = [
-  {
-    id: "1",
-    name: "free 1",
-    
-  },
-  {
-    id: "2",
-    name: "free 1",
-  },
-  {
-    id: "3",
-    name: "free 1",
-  },
-  {
-    id: "4",
-    name: "free 1",
-  },
-  {
-    id: "5",
-    name: "free 1",
-  },
-  
-];
-
-const useCustomers = (page, rowsPerPage) => {
+const useFeatureList = (page, rowsPerPage) => {
   return useMemo(() => {
     return applyPagination(data, page, rowsPerPage);
   }, [page, rowsPerPage]);
 };
 
-const useCustomerIds = (customers) => {
+const useCustomerIds = (featureList) => {
   return useMemo(() => {
-    return customers.map((customer) => customer.id);
-  }, [customers]);
+    return featureList.map((feature) => feature.id);
+  }, [featureList]);
 };
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const customers = useCustomers(page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
-  const customersSelection = useSelection(customersIds);
-  const [featureList, setFeatureList] = useState();
+  const [featureList, setFeatureList] = useState([]);
+  // const customers = useFeatureList(page, rowsPerPage);
+  const featureListIds = useCustomerIds(featureList);
+  const featureListSelection = useSelection(featureListIds);
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchFeatureAPIGet();
-        setFeatureList(data?.data);
+        setFeatureList(data?.data); 
       } catch (error) {
         console.log(error);
       }
@@ -72,7 +48,6 @@ const Page = () => {
     fetchData();
   }, []);
 
-console.log(featureList,"featureList")
   const handlePageChange = useCallback((event, value) => {
     setPage(value);
   }, []);
@@ -80,6 +55,7 @@ console.log(featureList,"featureList")
   const handleRowsPerPageChange = useCallback((event) => {
     setRowsPerPage(event.target.value);
   }, []);
+
 
   return (
     <>
@@ -121,17 +97,17 @@ console.log(featureList,"featureList")
             </Stack>
             <CustomersSearch />
             <FeatureTable
-              count={data.length}
-              items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
+              count={featureList.length}
+              items={featureList}
+              onDeselectAll={featureListSelection.handleDeselectAll}
+              onDeselectOne={featureListSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
+              onSelectAll={featureListSelection.handleSelectAll}
+              onSelectOne={featureListSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
+              selected={featureListSelection.selected}
             />
           </Stack>
         </Container>
@@ -139,7 +115,5 @@ console.log(featureList,"featureList")
     </>
   );
 };
-
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
 export default Page;

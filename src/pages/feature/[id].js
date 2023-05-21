@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -6,12 +6,27 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, Container, Stack, Card, Typography,Paper ,Grid  } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { FEATURE_DETAILS } from '../../common/constantData/language';
-
+import { fetchFeatureDetailsAPIGet } from '../../common/apiCall/api';
 
 const Page = () => {
   const router = useRouter();
   const { id } = router.query;
+  const [details, setDetails] = useState([]);
 
+ 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchFeatureDetailsAPIGet(id);
+        setDetails(data?.data); 
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+ 
   return (
     <>
       <Head>
@@ -38,13 +53,13 @@ const Page = () => {
          {FEATURE_DETAILS.MAME}
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-        Carson Darrin
+        {details.name}
         </Grid>
         <Grid  xs={4} sx={{marginBottom:"20px"}}>
         {FEATURE_DETAILS.DETAILS} 
         </Grid>
         <Grid  xs={8} sx={{marginBottom:"20px"}}>
-          chsdjcbsj cbhsbcsjc  sbcjscb s csbjcbsjc 
+          {details.details} 
         </Grid>
         
 
