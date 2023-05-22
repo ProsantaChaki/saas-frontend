@@ -5,7 +5,8 @@ import {
   SUBSCRIOTION_STORE_URL,
   USER_ME,
   FEATURE_STORE_URL,
-  FEATURE_LIST_URL
+  FEATURE_LIST_URL,
+  FEATURE_DETAILS_URL
 } from '../constantData/url';
 import { BASE_URL } from '../constantData/constants';
 
@@ -95,6 +96,19 @@ export function fetchFeatureAPIGet() {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+      },
+    },
+    false,
+    false,
+  );
+}
+
+export function fetchFeatureDetailsAPIGet(id) {
+  return apiGet(
+    `v1/auth/feature/${id}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
       },
     },
     false,

@@ -38,6 +38,13 @@ export const FeatureTable = (props) => {
   const selectedSome = selected.length > 0 && selected.length < items.length;
   const selectedAll = items.length > 0 && selected.length === items.length;
 
+  const truncateText = (text, limit) => {
+    if (text.length <= limit) {
+      return text;
+    }
+    return text.slice(0, limit) + "...";
+  };
+
   return (
     <Card>
       <TablePagination
@@ -99,7 +106,7 @@ export const FeatureTable = (props) => {
                         <Typography variant="subtitle2">{customer.name}</Typography>
                       </Stack>
                     </TableCell>
-                    <TableCell>{customer.details}</TableCell>
+                    <TableCell>{truncateText(customer.details, 100)}</TableCell>
                     <TableCell>
                       <Link href={`feature/${customer.id}`}>
                       <Button
