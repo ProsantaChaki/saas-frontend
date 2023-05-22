@@ -7,6 +7,7 @@ import {
   FEATURE_STORE_URL,
   FEATURE_LIST_URL
 } from '../constantData/url';
+import { BASE_URL } from '../constantData/constants';
 
 export const PAGE_SIZE = 10;
 export const GENRE_PAGE_SIZE = 9;
@@ -93,6 +94,7 @@ export function fetchFeatureAPIGet() {
     {
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     },
     false,

@@ -69,7 +69,9 @@ function handleFetchErrors(response) {
 }
 
 async function headerConfiguration(url, config, token=null)  {
+  console.log(url)
   if (url !== LOGIN_URL && url !== SIGNUP_URL ) {
+
     //TODO: set access token
       token = token ? token : await localStorage.getItem("token")
 
@@ -81,6 +83,7 @@ async function headerConfiguration(url, config, token=null)  {
         }
 
   }
+  console.log(config.headers, axios.defaults.headers.common)
   return new Promise(resolve => {
     resolve(config);
   });
@@ -171,7 +174,7 @@ async function apiGet(
 ) {
   const axiosToUse = useMock ? axiosInstance : axios;
   const fullUrl = useMock || external ? apiPath : API_BASE_URL + apiPath;
-  const newConfig = await headerConfiguration(apiPath, config ,'');
+  const newConfig = await headerConfiguration(apiPath, config );
   // console.log('newConfig......', newConfig);
   axiosRetry(axiosToUse, {retries: 3});
   return await axiosToUse
