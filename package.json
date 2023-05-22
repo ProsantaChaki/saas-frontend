@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "author": "Devias",
   "licence": "MIT",
-  "homepage": "http://ProsantaChaki.github.id/mhp-saas-frontend",
+  "homepage": "http://ProsantaChaki.github.id/saas-frontend",
   "private": false,
   "scripts": {
     "dev": "next",
